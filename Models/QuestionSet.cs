@@ -25,6 +25,8 @@ namespace quizweb.Models
         //[Required]
         public int CategoryId { get; set; }
 
+        public DateTime CreatedTime { get; set; } = DateTime.Now;
+
         // Navigation properties
         [ForeignKey(nameof(AuthorName))]
         public ApplicationUser Author { get; set; } = null!;

@@ -7,7 +7,7 @@ namespace quizweb.Models
     {
         [Key]
         [ForeignKey(nameof(User))]
-        public string userName { get; set; } = null!;
+        public string UserName { get; set; } = null!;
 
         public int TotalScore { get; set; }
 

@@ -15,7 +15,7 @@ namespace quizweb.Models
         public int QSetId { get; set; }
 
         //navigation property
-
         public QuestionSet QuestionSet { get; set; } = null!;
+        public ICollection<Answer> Answers { get; set; } = new List<Answer>();
     }
 }
