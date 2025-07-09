@@ -13,8 +13,6 @@ namespace quizweb.Models
         public ApplicationUser User { get; set; } = null!;
         public Question Question { get; set; } = null!;
         public QuestionSet QuestionSet { get; set; } = null!;
-
-        [ForeignKey(nameof(SelectedAnswerId))]
         public Answer Answer { get; set; } = null!;
     }
 }

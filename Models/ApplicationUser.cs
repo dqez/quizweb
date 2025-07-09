@@ -13,5 +13,14 @@ namespace quizweb.Models
         public DateOnly BirthDay { get; set; }
 
         public bool Sex { get; set; }
+
+        // Navigation properties
+        public ICollection<QuestionSet> QuestionSets { get; set; } = new List<QuestionSet>();
+        public ICollection<AnsweredQuestion> AnsweredQuestions { get; set; } = new List<AnsweredQuestion>();
+        public ICollection<ProgressQuestionSet> ProgressQuestionSets { get; set; } = new List<ProgressQuestionSet>();
+        public ICollection<MarkedQuestion> MarkedQuestions { get; set; } = new List<MarkedQuestion>();
+        public Ranking Ranking { get; set; } = null!;
+
+
     }
 }

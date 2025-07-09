@@ -15,3 +15,4 @@
         public Question Question { get; set; } = null!; // Assuming you want to track the last question answered
     }
 }
+    

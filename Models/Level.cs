@@ -4,10 +4,8 @@ namespace quizweb.Models
 {
     public class Level
     {
-        [Key]
         public int LevelId { get; set; }
 
-        [Required]
         [StringLength(50, ErrorMessage = "Level name cannot be longer than 50 characters.")]
         public string LevelName { get; set; } = null!;
 
