@@ -45,15 +45,24 @@ namespace quizweb.Data
                 e.HasOne(a => a.User)
                     .WithMany(u => u.AnsweredQuestions)
                     .HasForeignKey(a => a.UserName)
-                    .HasPrincipalKey(u => u.UserName);
+                    .HasPrincipalKey(u => u.UserName)
+                    .OnDelete(DeleteBehavior.Cascade); // khi xóa User, xóa hết AnsweredQuestion
 
                 e.HasOne(a => a.QuestionSet)
                     .WithMany(qs => qs.AnsweredQuestions)
-                    .HasForeignKey(a => a.QSetId);
+                    .HasForeignKey(a => a.QSetId)
+                    .OnDelete(DeleteBehavior.Restrict); // khi xóa QuestionSet, không xóa AnsweredQuestion
 
                 e.HasOne(a => a.Question)
                     .WithMany()
-                    .HasForeignKey(a => a.QuestionId);
+                    .HasForeignKey(a => a.QuestionId)
+                    .OnDelete(DeleteBehavior.Restrict); // khi xóa Question, không xóa AnsweredQuestion
+
+                e.HasOne(a => a.Answer)
+                    .WithMany()
+                    .HasForeignKey(a => a.SelectedAnswerId)
+                    .OnDelete(DeleteBehavior.Restrict); // khi xóa Answer, không xóa AnsweredQuestion
+
             });
 
             builder.Entity<ApplicationUser>(e =>
@@ -92,11 +101,13 @@ namespace quizweb.Data
                 e.HasOne(m => m.User) //
                     .WithMany(u => u.MarkedQuestions)
                     .HasForeignKey(m => m.UserName)
-                    .HasPrincipalKey(u => u.UserName);
+                    .HasPrincipalKey(u => u.UserName)
+                    .OnDelete(DeleteBehavior.Cascade); // khi xóa User, xóa hết MarkedQuestion
 
                 e.HasOne(m => m.Question)
                     .WithMany() //  ONE question can be marked by many users
-                    .HasForeignKey(e => e.QuestionId);
+                    .HasForeignKey(e => e.QuestionId)
+                    .OnDelete(DeleteBehavior.Restrict);  // chuyển từ Cascade sang Restrict (hạn chế) bời vì gặp lỗi cascade paths
             });
 
             builder.Entity<ProgressQuestionSet>(e =>
@@ -106,11 +117,18 @@ namespace quizweb.Data
                 e.HasOne(e => e.User)
                     .WithMany(u => u.ProgressQuestionSets)
                     .HasForeignKey(e => e.UserName)
-                    .HasPrincipalKey(u => u.UserName);
+                    .HasPrincipalKey(u => u.UserName)
+                    .OnDelete(DeleteBehavior.Cascade); // khi xóa User, xóa hết ProgressQuestionSet
 
                 e.HasOne(e => e.QuestionSet)
                     .WithMany(qs => qs.ProgressQuestionSets)
-                    .HasForeignKey(e => e.QSetId);
+                    .HasForeignKey(e => e.QSetId)
+                    .OnDelete(DeleteBehavior.Restrict); // khi xóa QuestionSet, không xóa ProgressQuestionSet
+
+                e.HasOne(e => e.Question)
+                    .WithMany() //  ONE question can be in many ProgressQuestionSets
+                    .HasForeignKey(e => e.QuestionLastId)
+                    .OnDelete(DeleteBehavior.Restrict); // khi xóa Question, không xóa ProgressQuestionSet
             });
 
             builder.Entity<Question>(e =>
