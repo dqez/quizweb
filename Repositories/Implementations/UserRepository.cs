@@ -5,32 +5,32 @@ namespace quizweb.Repositories.Implementations
 {
     public class UserRepository : IUserRepository
     {
-        public Task AddUserAsync(ApplicationUser user)
+        public Task<IEnumerable<QuestionSet>> GetCreatedQuestionSetsAsync(string username)
         {
             throw new NotImplementedException();
         }
 
-        public Task DeleteUserAsync(string username)
+        public Task<IEnumerable<MarkedQuestion>> GetMarkedQuestionAsync(string username)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<ApplicationUser>> GetAllUsersAsync()
+        public Task<ApplicationUser> GetProfileAsync(string username)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ApplicationUser?> GetProfileAsync(string username)
+        public Task<IEnumerable<ProgressQuestionSet>> GetProgressQuestionSetsAsync(string username)
         {
             throw new NotImplementedException();
         }
 
-        public Task UpdateProfile(ApplicationUser user)
+        public Task<IEnumerable<Ranking>> GetTopRankingsAsync(int topN)
         {
             throw new NotImplementedException();
         }
 
-        public Task UpdateUserAsync(ApplicationUser user)
+        public Task UpdateProfileAsync(ApplicationUser user)
         {
             throw new NotImplementedException();
         }
