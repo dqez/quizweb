@@ -1,38 +1,49 @@
-﻿using quizweb.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using quizweb.Data;
+using quizweb.Models;
 using quizweb.Repositories.Interfaces;
+using SQLitePCL;
 
 namespace quizweb.Repositories.Implementations
 {
     public class UserRepository : IUserRepository
     {
-        public Task<IEnumerable<QuestionSet>> GetCreatedQuestionSetsAsync(string username)
+        private readonly AppDbContext _context;
+
+        public UserRepository(AppDbContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
         }
 
-        public Task<IEnumerable<MarkedQuestion>> GetMarkedQuestionAsync(string username)
+        public async Task<IEnumerable<QuestionSet>> GetCreatedQuestionSetsAsync(string username)
         {
-            throw new NotImplementedException();
+            return await _context.QuestionSets.Where(qs => qs.AuthorName == username).ToListAsync();
         }
 
-        public Task<ApplicationUser> GetProfileAsync(string username)
+        public async Task<IEnumerable<MarkedQuestion>> GetMarkedQuestionAsync(string username)
         {
-            throw new NotImplementedException();
+            return await _context.MarkedQuestions.Where(mq => mq.UserName == username).ToListAsync();
         }
 
-        public Task<IEnumerable<ProgressQuestionSet>> GetProgressQuestionSetsAsync(string username)
+        public async Task<IEnumerable<ProgressQuestionSet>> GetProgressQuestionSetsAsync(string username)
         {
-            throw new NotImplementedException();
+            return await _context.ProgressQuestionSets.Where(pqs => pqs.UserName == username).ToListAsync();
         }
 
-        public Task<IEnumerable<Ranking>> GetTopRankingsAsync(int topN)
+        public async Task<IEnumerable<Ranking>> GetTopRankingsAsync(int topN)
         {
-            throw new NotImplementedException();
+            return await _context.Rankings.OrderByDescending(r => r.TotalScore).Take(topN).ToListAsync();
         }
 
-        public Task UpdateProfileAsync(ApplicationUser user)
+        public async Task<ApplicationUser> GetProfileAsync(string username)
         {
-            throw new NotImplementedException();
+            return await _context.Users.FirstAsync(u => u.UserName == username);
+        }
+
+        public async Task UpdateProfileAsync(ApplicationUser user)
+        {
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
         }
     }
 }
