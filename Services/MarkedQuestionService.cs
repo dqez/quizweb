@@ -1,0 +1,30 @@
+﻿using quizweb.Models;
+using quizweb.Repositories.Interfaces;
+
+namespace quizweb.Services
+{
+    public class MarkedQuestionService
+    {
+        private readonly IMarkedQuestionRepository _markedQuestionRepository;
+
+        public MarkedQuestionService(IMarkedQuestionRepository markedQuestionRepository)
+        {
+            _markedQuestionRepository = markedQuestionRepository;
+        }
+
+        public async Task<List<MarkedQuestion>> GetAllMarkedQuestionsAsync(string username)
+        {
+            return (await _markedQuestionRepository.GetAllMarkedQuestionsAsync(username)).ToList();
+        }
+
+        public async Task AddMarkedQuestion(MarkedQuestion markedQuestion)
+        {
+            await _markedQuestionRepository.AddMarkedQuestion(markedQuestion);
+        }
+
+        public async Task RemoveMarkedQuestion(int id)
+        {
+            await _markedQuestionRepository.RemoveMarkedQuestion(id);
+        }
+    }
+}
