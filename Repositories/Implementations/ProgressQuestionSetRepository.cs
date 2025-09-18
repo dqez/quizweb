@@ -34,7 +34,7 @@ namespace quizweb.Repositories.Implementations
             return await _context.ProgressQuestionSets.Where(pqs => pqs.UserName == username).ToListAsync();
         }
 
-        public async Task<ProgressQuestionSet> GetProgressQuestionSetById(int id)
+        public async Task<ProgressQuestionSet?> GetProgressQuestionSetById(int id)
         {
             return await _context.ProgressQuestionSets.FirstAsync(pqs => pqs.QSetId == id);
         }

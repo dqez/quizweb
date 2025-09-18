@@ -5,7 +5,7 @@ namespace quizweb.Repositories.Interfaces
     public interface ILevelRepository
     {
         Task<IEnumerable<Level>> GetAllLevelsAsync();
-        Task<Level> GetLevelByIdAsync(int id);
+        Task<Level?> GetLevelByIdAsync(int id);
         Task AddLevelAsync(Level level);
         Task UpdateLevelAsync(Level level);
         Task DeleteLevelAsync(int id);

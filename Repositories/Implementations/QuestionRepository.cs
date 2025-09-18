@@ -15,7 +15,7 @@ namespace quizweb.Repositories.Implementations
             _context = context;
         }
 
-        public async Task<Question> GetQuestionByIdAsync(int id)
+        public async Task<Question?> GetQuestionByIdAsync(int id)
         {
             return await _context.Questions.FirstAsync(q => q.QuestionId == id);
         }

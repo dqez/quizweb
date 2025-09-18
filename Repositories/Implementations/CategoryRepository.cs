@@ -18,6 +18,11 @@ namespace quizweb.Repositories.Implementations
         {
             await _context.Categories.AddAsync(category);
         }
+        public async Task UpdateCategoryAsync(Category category)
+        {
+            _context.Categories.Update(category);
+            await _context.SaveChangesAsync();
+        }
 
         public async Task DeleteCategoryAsync(int categoryId)
         {
@@ -34,15 +39,10 @@ namespace quizweb.Repositories.Implementations
             return await _context.Categories.ToListAsync();
         }
 
-        public async Task<Category> GetCategoryByIdAsync(int categoryId)
+        public async Task<Category?> GetCategoryByIdAsync(int categoryId)
         {
             return await _context.Categories.FirstAsync(c => c.CategoryId == categoryId);
         }
 
-        public async Task UpdateCategoryAsync(Category category)
-        {
-            _context.Categories.Update(category);
-            await _context.SaveChangesAsync();
-        }
     }
 }

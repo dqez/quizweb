@@ -19,6 +19,12 @@ namespace quizweb.Repositories.Implementations
             await _context.Levels.AddAsync(level);
         }
 
+        public async Task UpdateLevelAsync(Level level)
+        {
+            _context.Levels.Update(level);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task DeleteLevelAsync(int id)
         {
             var level = await _context.Levels.FindAsync(id);
@@ -34,15 +40,10 @@ namespace quizweb.Repositories.Implementations
             return await _context.Levels.ToListAsync();
         }
 
-        public async Task<Level> GetLevelByIdAsync(int id)
+        public async Task<Level?> GetLevelByIdAsync(int id)
         {
             return await _context.Levels.FirstAsync(l => l.LevelId == id);
         }
-
-        public async Task UpdateLevelAsync(Level level)
-        {
-            _context.Levels.Update(level);
-            await _context.SaveChangesAsync();
-        }
+        
     }
 }
