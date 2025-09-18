@@ -8,6 +8,7 @@ namespace quizweb.Repositories.Implementations
 {
     public class UserRepository : IUserRepository
     {
+
         private readonly AppDbContext _context;
 
         public UserRepository(AppDbContext context)
@@ -16,31 +17,37 @@ namespace quizweb.Repositories.Implementations
         }
 
         public async Task<IEnumerable<QuestionSet>> GetCreatedQuestionSetsAsync(string username)
+
         {
             return await _context.QuestionSets.Where(qs => qs.AuthorName == username).ToListAsync();
         }
 
         public async Task<IEnumerable<MarkedQuestion>> GetMarkedQuestionAsync(string username)
+
         {
             return await _context.MarkedQuestions.Where(mq => mq.UserName == username).ToListAsync();
         }
 
         public async Task<IEnumerable<ProgressQuestionSet>> GetProgressQuestionSetsAsync(string username)
+
         {
             return await _context.ProgressQuestionSets.Where(pqs => pqs.UserName == username).ToListAsync();
         }
 
         public async Task<IEnumerable<Ranking>> GetTopRankingsAsync(int topN)
+
         {
             return await _context.Rankings.OrderByDescending(r => r.TotalScore).Take(topN).ToListAsync();
         }
 
         public async Task<ApplicationUser> GetProfileAsync(string username)
+
         {
             return await _context.Users.FirstAsync(u => u.UserName == username);
         }
 
         public async Task UpdateProfileAsync(ApplicationUser user)
+
         {
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
