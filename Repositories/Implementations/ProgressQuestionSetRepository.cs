@@ -36,7 +36,7 @@ namespace quizweb.Repositories.Implementations
 
         public async Task<ProgressQuestionSet?> GetProgressQuestionSetById(int id)
         {
-            return await _context.ProgressQuestionSets.FirstAsync(pqs => pqs.QSetId == id);
+            return await _context.ProgressQuestionSets.FindAsync(id);
         }
 
         public async Task UpdateProgressQuestionSet(ProgressQuestionSet progressQuestionSet)

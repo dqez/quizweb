@@ -1,9 +1,10 @@
 ﻿using quizweb.Models;
 using quizweb.Repositories.Interfaces;
+using quizweb.Services.Interfaces;
 
-namespace quizweb.Services
+namespace quizweb.Services.Implementaitions
 {
-    public class CategoryService
+    public class CategoryService : ICategoryService
     {
         private readonly ICategoryRepository _categoryRepository;
 
@@ -28,12 +29,18 @@ namespace quizweb.Services
 
         public async Task<List<Category>> GetAllCategoryAsync()
         {
-            return [.. (await _categoryRepository.GetAllCategoryAsync())];
+            return [.. await _categoryRepository.GetAllCategoryAsync()];
         }
 
         public async Task<Category> GetCategoryByIdAsync(int categoryId)
         {
-            return await _categoryRepository.GetCategoryByIdAsync(categoryId);
+            var  cate = await _categoryRepository.GetCategoryByIdAsync(categoryId);
+            if (cate == null)
+            {
+                throw new Exception("Category not found");
+            }
+            return cate;
+
         }
 
     }

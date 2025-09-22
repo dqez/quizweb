@@ -42,7 +42,7 @@ namespace quizweb.Repositories.Implementations
 
         public async Task<Level?> GetLevelByIdAsync(int id)
         {
-            return await _context.Levels.FirstAsync(l => l.LevelId == id);
+            return await _context.Levels.FindAsync(id);
         }
         
     }

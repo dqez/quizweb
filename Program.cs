@@ -4,6 +4,8 @@ using quizweb.Data;
 using quizweb.Models;
 using quizweb.Repositories.Interfaces;
 using quizweb.Repositories.Implementations;
+using quizweb.Services.Interfaces;
+using quizweb.Services.Implementaitions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +26,14 @@ builder.Services.AddScoped<IProgressQuestionSetRepository, ProgressQuestionSetRe
 builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
 builder.Services.AddScoped<IQuestionSetRepository, QuestionSetRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+//DI for services
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<ILevelService, LevelService>();
+builder.Services.AddScoped<IMarkedQuestionService, MarkedQuestionService>();
+builder.Services.AddScoped<IProgressQuestionSetService, ProgressQuestionSetService>();
+builder.Services.AddScoped<IQuestionService, QuestionService>();
+builder.Services.AddScoped<IQuestionSetService, QuestionSetService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 

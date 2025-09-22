@@ -40,7 +40,7 @@ namespace quizweb.Repositories.Implementations
             return await _context.Rankings.OrderByDescending(r => r.TotalScore).Take(topN).ToListAsync();
         }
 
-        public async Task<ApplicationUser> GetProfileAsync(string username)
+        public async Task<ApplicationUser?> GetProfileAsync(string username)
 
         {
             return await _context.Users.FirstAsync(u => u.UserName == username);

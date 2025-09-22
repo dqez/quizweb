@@ -21,7 +21,7 @@ namespace quizweb.Repositories.Implementations
 
         public async Task DeleteQuestionSetAsync(int id)
         {
-            var qs = _context.QuestionSets.Find(id);
+            var qs = await _context.QuestionSets.FindAsync(id);
             if (qs != null)
             {
                 _context.QuestionSets.Remove(qs);

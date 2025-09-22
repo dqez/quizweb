@@ -41,7 +41,7 @@ namespace quizweb.Repositories.Implementations
 
         public async Task<Category?> GetCategoryByIdAsync(int categoryId)
         {
-            return await _context.Categories.FirstAsync(c => c.CategoryId == categoryId);
+            return await _context.Categories.FindAsync(categoryId);
         }
 
     }

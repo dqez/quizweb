@@ -1,9 +1,10 @@
 ﻿using quizweb.Models;
 using quizweb.Repositories.Interfaces;
+using quizweb.Services.Interfaces;
 
-namespace quizweb.Services
+namespace quizweb.Services.Implementaitions
 {
-    public class LevelService
+    public class LevelService : ILevelService
     {
         private readonly ILevelRepository _levelRepository;
 

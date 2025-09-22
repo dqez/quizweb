@@ -1,9 +1,10 @@
 ﻿using quizweb.Models;
 using quizweb.Repositories.Interfaces;
+using quizweb.Services.Interfaces;
 
-namespace quizweb.Services
+namespace quizweb.Services.Implementaitions
 {
-    public class QuestionService
+    public class QuestionService : IQuestionService
     {
         private readonly IQuestionRepository _questionRepository;
 
@@ -12,7 +13,7 @@ namespace quizweb.Services
             _questionRepository = questionRepository;
         }
 
-        public async Task<Question> GetQuestionByIdAsync(int id)
+        public async Task<Question?> GetQuestionByIdAsync(int id)
         {
             return await _questionRepository.GetQuestionByIdAsync(id);
         }

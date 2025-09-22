@@ -8,7 +8,7 @@ namespace quizweb.Repositories.Interfaces
         Task<IEnumerable<QuestionSet>> GetCreatedQuestionSetsAsync(string username);
         Task<IEnumerable<ProgressQuestionSet>> GetProgressQuestionSetsAsync(string username);
         Task<IEnumerable<MarkedQuestion>> GetMarkedQuestionAsync(string username);
-        Task<ApplicationUser> GetProfileAsync(string username);
+        Task<ApplicationUser?> GetProfileAsync(string username);
         Task UpdateProfileAsync(ApplicationUser user);
     }
 }

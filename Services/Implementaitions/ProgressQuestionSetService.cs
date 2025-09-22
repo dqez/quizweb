@@ -1,13 +1,14 @@
 ﻿using quizweb.Models;
 using quizweb.Repositories.Interfaces;
+using quizweb.Services.Interfaces;
 
-namespace quizweb.Services
+namespace quizweb.Services.Implementaitions
 {
-    public class ProgressQuestionSetsService
+    public class ProgressQuestionSetService : IProgressQuestionSetService
     {
         private readonly IProgressQuestionSetRepository _progressQuestionSetRepository;
 
-        public ProgressQuestionSetsService(IProgressQuestionSetRepository progressQuestionSetRepository)
+        public ProgressQuestionSetService(IProgressQuestionSetRepository progressQuestionSetRepository)
         {
             _progressQuestionSetRepository = progressQuestionSetRepository;
         }
@@ -34,7 +35,13 @@ namespace quizweb.Services
 
         public async Task<ProgressQuestionSet> GetProgressQuestionSetById(int id)
         {
-            return await _progressQuestionSetRepository.GetProgressQuestionSetById(id);
+            var pqs = await _progressQuestionSetRepository.GetProgressQuestionSetById(id);
+            if (pqs == null)
+            {
+                throw new Exception("ProgressQuestionSet not found");
+            }
+            return pqs;
+
         }
     }
 }
