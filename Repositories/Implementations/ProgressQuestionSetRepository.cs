@@ -17,6 +17,7 @@ namespace quizweb.Repositories.Implementations
         public async Task AddProgressQuestionSet(ProgressQuestionSet progressQuestionSet)
         {
             await _context.ProgressQuestionSets.AddAsync(progressQuestionSet);
+            await _context.SaveChangesAsync();
         }
 
         public async Task DeleteProgressQuestionSet(int id)

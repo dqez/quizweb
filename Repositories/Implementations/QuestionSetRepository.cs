@@ -17,6 +17,7 @@ namespace quizweb.Repositories.Implementations
         public async Task AddQuestionSetAsync(QuestionSet questionSet)
         {
             await _context.QuestionSets.AddAsync(questionSet);
+            await _context.SaveChangesAsync();
         }
 
         public async Task DeleteQuestionSetAsync(int id)

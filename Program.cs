@@ -34,6 +34,7 @@ builder.Services.AddScoped<IProgressQuestionSetService, ProgressQuestionSetServi
 builder.Services.AddScoped<IQuestionService, QuestionService>();
 builder.Services.AddScoped<IQuestionSetService, QuestionSetService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IFileService, FileService>();
 
 var app = builder.Build();
 

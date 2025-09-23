@@ -17,6 +17,7 @@ namespace quizweb.Repositories.Implementations
         public async Task AddMarkedQuestion(MarkedQuestion markedQuestion)
         {
             await _context.MarkedQuestions.AddAsync(markedQuestion);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<MarkedQuestion>> GetAllMarkedQuestionsAsync(string username)

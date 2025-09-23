@@ -17,6 +17,7 @@ namespace quizweb.Repositories.Implementations
         public async Task AddLevelAsync(Level level)
         {
             await _context.Levels.AddAsync(level);
+            await _context.SaveChangesAsync();
         }
 
         public async Task UpdateLevelAsync(Level level)

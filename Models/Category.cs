@@ -6,7 +6,7 @@ namespace quizweb.Models
     {
         public int CategoryId { get; set; }
 
-        [StringLength(50, ErrorMessage = "Category name cannot be longer than 50 characters.")]
+        [StringLength(100, ErrorMessage = "Category name cannot be longer than 50 characters.")]
         public string CategoryName { get; set; } = null!;
 
         [StringLength(200, ErrorMessage = "Image URL cannot be longer than 200 characters.")]

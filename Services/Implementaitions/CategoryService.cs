@@ -1,21 +1,31 @@
 ﻿using quizweb.Models;
+using quizweb.Repositories.Implementations;
 using quizweb.Repositories.Interfaces;
 using quizweb.Services.Interfaces;
+using quizweb.ViewModels;
 
 namespace quizweb.Services.Implementaitions
 {
     public class CategoryService : ICategoryService
     {
+        private readonly IFileService _fileService;
         private readonly ICategoryRepository _categoryRepository;
 
-        public CategoryService(ICategoryRepository categoryRepository)
+        public CategoryService(ICategoryRepository categoryRepository, IFileService fileService)
         {
             _categoryRepository = categoryRepository;
+            _fileService = fileService;
         }
 
-        public async Task AddCategoryAsync(Category category)
+        public async Task AddCategoryAsync(CategoryCreateViewModel viewModel)
         {
-            await _categoryRepository.AddCategoryAsync(category);
+            var path = await _fileService.UploadFileAsync(viewModel.ImageFile);
+            var cate = new Category
+            {
+                CategoryName = viewModel.CategoryName,
+                ImgUrl = path!
+            };
+            await _categoryRepository.AddCategoryAsync(cate);
         }
         public async Task UpdateCategoryAsync(Category category)
         {

@@ -2,6 +2,7 @@
 using quizweb.Models;
 using quizweb.Services.Implementaitions;
 using quizweb.Services.Interfaces;
+using quizweb.ViewModels;
 
 namespace quizweb.Controllers
 {
@@ -35,14 +36,20 @@ namespace quizweb.Controllers
         // POST: Categories1Controller/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CategoryId, CategoryName, UrlImg")] Category category)
+        public async Task<IActionResult> Create(CategoryCreateViewModel cateCVM)
         {
             if (ModelState.IsValid)
             {
-                await _categoryService.AddCategoryAsync(category);
-                return RedirectToAction(nameof(Index));
+                try { 
+                    await _categoryService.AddCategoryAsync(cateCVM); 
+                    return RedirectToAction(nameof(Index));
+                }
+                catch(Exception ex)
+                {
+                    ModelState.AddModelError("", "Failed to create category: " + ex.Message);
+                }
             }
-            return View(category);
+            return View(cateCVM);
         }
 
         // GET: Categories1Controller/Edit/5
