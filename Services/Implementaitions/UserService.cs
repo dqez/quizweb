@@ -28,12 +28,7 @@ namespace quizweb.Services.Implementaitions
             return (await _userRepository.GetProgressQuestionSetsAsync(username)).ToList();
         }
 
-        public async Task<List<Ranking>> GetRankingsAsync(int topN)
-        {
-            return (await _userRepository.GetTopRankingsAsync(topN)).ToList();
-        }
-
-        public async Task<ApplicationUser> GetProfileAsync(string username)
+        public async Task<ApplicationUser?> GetProfileAsync(string username)
         {
             return await _userRepository.GetProfileAsync(username);
         }

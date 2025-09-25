@@ -26,6 +26,7 @@ builder.Services.AddScoped<IProgressQuestionSetRepository, ProgressQuestionSetRe
 builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
 builder.Services.AddScoped<IQuestionSetRepository, QuestionSetRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IRankingRepository, RankingRepository>();
 //DI for services
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ILevelService, LevelService>();
@@ -34,6 +35,7 @@ builder.Services.AddScoped<IProgressQuestionSetService, ProgressQuestionSetServi
 builder.Services.AddScoped<IQuestionService, QuestionService>();
 builder.Services.AddScoped<IQuestionSetService, QuestionSetService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IRankingService, RankingService>();
 builder.Services.AddScoped<IFileService, FileService>();
 
 var app = builder.Build();

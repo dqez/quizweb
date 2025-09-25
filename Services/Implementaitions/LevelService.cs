@@ -32,7 +32,7 @@ namespace quizweb.Services.Implementaitions
             return (await _levelRepository.GetAllLevelsAsync()).ToList();
         }
 
-        public async Task<Level> GetLevelByIdAsync(int id)
+        public async Task<Level?> GetLevelByIdAsync(int id)
         {
             return await _levelRepository.GetLevelByIdAsync(id);
         }

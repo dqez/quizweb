@@ -13,14 +13,9 @@ namespace quizweb.Services.Implementaitions
             _questionSetRepository = questionSetRepository;
         }
 
-        public async Task<QuestionSet> GetQuestionSetRandomByIdCateAndIdLevel(int idCate, int idLevel)
+        public async Task<QuestionSet?> GetQuestionSetRandomByIdCateAndIdLevel(int idCate, int idLevel)
         {
-            var qsRand = await _questionSetRepository.GetQuestionSetRandomByIdCateAndIdLevel(idCate, idLevel);
-            if (qsRand == null)
-            {
-                throw new Exception("No question set found for the given category and level.");
-            }
-            return qsRand;
+           return await _questionSetRepository.GetQuestionSetRandomByIdCateAndIdLevel(idCate, idLevel);
         }
 
         public async Task<List<QuestionSet>> GetAllCreatedQuestionSetsAsync(string username)

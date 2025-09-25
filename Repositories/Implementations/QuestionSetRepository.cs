@@ -37,7 +37,7 @@ namespace quizweb.Repositories.Implementations
 
         public async Task<QuestionSet?> GetQuestionSetByIdAsync(int id)
         {
-            return await _context.QuestionSets.FirstOrDefaultAsync(qs => qs.QSetId == id);
+            return await _context.QuestionSets.FindAsync(id);
         }
 
         public async Task<QuestionSet?> GetQuestionSetRandomByIdCateAndIdLevel(int idCate, int idLevel)
