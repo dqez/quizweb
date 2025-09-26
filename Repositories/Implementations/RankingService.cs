@@ -15,6 +15,15 @@ namespace quizweb.Repositories.Implementations
 
         public async Task CreateInitialRankingAsync(string username)
         {
+            try
+            {
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
             await _rankingRepository.CreateInitialRankingAsync(username);
         }
 
