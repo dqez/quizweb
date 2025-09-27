@@ -37,7 +37,7 @@ namespace quizweb.Repositories.Implementations
         public async Task<ApplicationUser?> GetProfileAsync(string username)
 
         {
-            return await _context.Users.FindAsync(username);
+            return await _context.Users.Where(u => u.UserName == username).FirstOrDefaultAsync();
         }
 
         public async Task UpdateProfileAsync(ApplicationUser user)

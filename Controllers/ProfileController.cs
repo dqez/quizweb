@@ -1,45 +1,52 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using quizweb.Services.Interfaces;
-using quizweb.ViewModels;
 
 namespace quizweb.Controllers
 {
-    public class RankingController : Controller
+    [Authorize]
+    public class ProfileController : Controller
     {
-        private readonly ILogger<RankingController> _logger;
-        private readonly IRankingService _rankingService;
+        private readonly ILogger<ProfileController> _logger;
+        private readonly IUserService _userService;
 
-        public RankingController(ILogger<RankingController> logger, IRankingService rankingService)
+        public ProfileController(ILogger<ProfileController> logger, IUserService userService)
         {
             _logger = logger;
-            _rankingService = rankingService;
+            _userService = userService;
         }
 
-        // GET: RankingController
+
+        // GET: ProfileController
         public async Task<IActionResult> Index()
         {
-            var rankings = await _rankingService.GetTopRankingsAsync(10);
-            var viewModels = rankings.Select(r => new RankingListViewModel
+            if(!User.Identity?.IsAuthenticated ==true)
             {
-                Username = r.UserName,
-                TotalScore = r.TotalScore
-            }).ToList();
-            return View(viewModels);
+                return Unauthorized();
+            }
+            var username = User.Identity?.Name!;
+            var user = await _userService.GetProfileAsync(username);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return View(user);
         }
 
-        // GET: RankingController/Details/5
+        // GET: ProfileController/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: RankingController/Create
+        // GET: ProfileController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: RankingController/Create
+        // POST: ProfileController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(IFormCollection collection)
@@ -54,13 +61,13 @@ namespace quizweb.Controllers
             }
         }
 
-        // GET: RankingController/Edit/5
+        // GET: ProfileController/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
 
-        // POST: RankingController/Edit/5
+        // POST: ProfileController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
@@ -75,13 +82,13 @@ namespace quizweb.Controllers
             }
         }
 
-        // GET: RankingController/Delete/5
+        // GET: ProfileController/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: RankingController/Delete/5
+        // POST: ProfileController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)
