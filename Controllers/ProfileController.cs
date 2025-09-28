@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using quizweb.Services.Interfaces;
+using quizweb.ViewModels;
 
 namespace quizweb.Controllers
 {
@@ -31,7 +32,16 @@ namespace quizweb.Controllers
             {
                 return NotFound();
             }
-            return View(user);
+
+            var viewModel = new UserEditViewModel
+            {
+                Username = user.UserName!,
+                Birthday = user.BirthDay,
+                Email = user.Email!,
+                Fullname = user.FullName,
+                Sex = user.Sex,
+            };
+            return View(viewModel);
         }
 
         // GET: ProfileController/Details/5
@@ -40,26 +50,6 @@ namespace quizweb.Controllers
             return View();
         }
 
-        // GET: ProfileController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: ProfileController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
 
         // GET: ProfileController/Edit/5
         public ActionResult Edit(int id)

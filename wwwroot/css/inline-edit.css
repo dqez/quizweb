@@ -1,0 +1,41 @@
+﻿.edit-field {
+    transition: all 0.3s ease;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+    .edit-field:hover {
+        background-color: #f8f9fa;
+    }
+
+.display-value {
+    min-height: 1.5em;
+    border-radius: 3px;
+    transition: all 0.2s ease;
+}
+
+.edit-input:focus {
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.btn-sm {
+    font-size: 0.875rem;
+}
+
+.invalid-feedback {
+    font-size: 0.875rem;
+}
+
+@keyframes pulse {
+    0% {
+        background-color: #d4edda;
+    }
+
+    100% {
+        background-color: transparent;
+    }
+}
+
+.bg-light {
+    animation: pulse 1s ease-in-out;
+}
