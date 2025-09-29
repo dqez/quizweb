@@ -2,188 +2,110 @@
 @{
     ViewData["Title"] = "Profile";
 }
-
-@section Styles{
-    <link rel="stylesheet" href="~/css/inline-edit.css" asp-append-version="true" />
-}
-
-<div class="container mt-4">
-    <div class="row">
-        <div class="col-md-8 mx-auto">
-            <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                    <h3 class="mb-0">
-                        <i class="fas fa-user me-2"></i>User Profile
-                    </h3>
-                    <button id="globalEdit" class="btn btn-outline-light btn-sm">
-                        <i class="fas fa-edit me-1"></i>Edit All
-                    </button>
-                </div>
-                
-                <div class="card-body">
-                    <!-- Username (Read-only) -->
-                    <div class="mb-3">
-                        <label class="form-label fw-bold text-muted">Username</label>
-                        <div class="d-flex align-items-center">
-                            <span class="badge bg-secondary fs-6">@Model.Username</span>
-                            <small class="text-muted ms-2">(Cannot be changed)</small>
-                        </div>
-                    </div>
-
-                    <!-- Full Name Field -->
-                    <div class="mb-3 edit-field" data-field="fullName" data-validation="maxlength:100">
-                        <label class="form-label fw-bold">Full Name</label>
-                        <div class="d-flex align-items-center">
-                            <span class="display-value flex-grow-1 p-2 border-bottom">
-                                @(string.IsNullOrEmpty(Model.Fullname) ? "Not provided" : Model.Fullname)
-                            </span>
-                            <input type="text" class="form-control edit-input" 
-                                   value="@Model.Fullname" 
-                                   data-original="@Model.Fullname" 
-                                   placeholder="Enter your full name"
-                                   style="display: none;">
-                            <button class="btn btn-sm btn-outline-primary ms-2 edit-btn" title="Edit Full Name">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                        </div>
-                        <div class="edit-controls mt-2" style="display: none;">
-                            <button class="btn btn-sm btn-success save-btn me-2">
-                                <i class="fas fa-check me-1"></i>Save
-                            </button>
-                            <button class="btn btn-sm btn-secondary cancel-btn">
-                                <i class="fas fa-times me-1"></i>Cancel
-                            </button>
-                        </div>
-                        <div class="invalid-feedback"></div>
-                    </div>
-
-                    <!-- Email Field -->
-                    <div class="mb-3 edit-field" data-field="email" data-validation="required|email">
-                        <label class="form-label fw-bold">Email</label>
-                        <div class="d-flex align-items-center">
-                            <span class="display-value flex-grow-1 p-2 border-bottom">
-                                @Model.Email
-                            </span>
-                            <input type="email" class="form-control edit-input" 
-                                   value="@Model.Email"
-                                   data-original="@Model.Email"
-                                   placeholder="Enter your email"
-                                   style="display: none;">
-                            <button class="btn btn-sm btn-outline-primary ms-2 edit-btn" title="Edit Email">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                        </div>
-                        <div class="edit-controls mt-2" style="display: none;">
-                            <button class="btn btn-sm btn-success save-btn me-2">
-                                <i class="fas fa-check me-1"></i>Save
-                            </button>
-                            <button class="btn btn-sm btn-secondary cancel-btn">
-                                <i class="fas fa-times me-1"></i>Cancel
-                            </button>
-                        </div>
-                        <div class="invalid-feedback"></div>
-                    </div>
-
-                    <!-- Birthday Field -->
-                    <div class="mb-3 edit-field" data-field="birthday" data-validation="pastdate">
-                        <label class="form-label fw-bold">Birthday</label>
-                        <div class="d-flex align-items-center">
-                            <span class="display-value flex-grow-1 p-2 border-bottom">
-                                @(Model.Birthday.ToString("MMMM dd, yyyy") ?? "Not provided")
-                            </span>
-                            <input type="date" class="form-control edit-input" 
-                                   value="@Model.Birthday.ToString("yyyy-MM-dd")"
-                                   data-original="@Model.Birthday.ToString("yyyy-MM-dd")"
-                                   max="@DateTime.Now.AddYears(-13).ToString("yyyy-MM-dd")"
-                                   style="display: none;">
-                            <button class="btn btn-sm btn-outline-primary ms-2 edit-btn" title="Edit Birthday">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                        </div>
-                        <div class="edit-controls mt-2" style="display: none;">
-                            <button class="btn btn-sm btn-success save-btn me-2">
-                                <i class="fas fa-check me-1"></i>Save
-                            </button>
-                            <button class="btn btn-sm btn-secondary cancel-btn">
-                                <i class="fas fa-times me-1"></i>Cancel
-                            </button>
-                        </div>
-                        <div class="invalid-feedback"></div>
-                    </div>
-
-                    <!-- Gender Field -->
-                    <div class="mb-3 edit-field" data-field="sex" data-validation="required">
-                        <label class="form-label fw-bold">Gender</label>
-                        <div class="d-flex align-items-center">
-                            <span class="display-value flex-grow-1 p-2 border-bottom">
-                                @(Model.Sex == false ? "Female" : "Male")
-                            </span>
-                            <select class="form-select edit-input" 
-                                    data-original="@Model.Sex.ToString().ToLower()"
-                                    style="display: none;">
-                                <option value="true" selected="@(Model.Sex == true)">Male</option>
-                                <option value="false" selected="@(Model.Sex == false)">Female</option>
-                            </select>
-                            <button class="btn btn-sm btn-outline-primary ms-2 edit-btn" title="Edit Gender">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                        </div>
-                        <div class="edit-controls mt-2" style="display: none;">
-                            <button class="btn btn-sm btn-success save-btn me-2">
-                                <i class="fas fa-check me-1"></i>Save
-                            </button>
-                            <button class="btn btn-sm btn-secondary cancel-btn">
-                                <i class="fas fa-times me-1"></i>Cancel
-                            </button>
-                        </div>
-                        <div class="invalid-feedback"></div>
-                    </div>
-
-                    <!-- Last Updated Info -->
-                    <div class="mt-4 pt-3 border-top">
-                        <small class="text-muted">
-                            <i class="fas fa-clock me-1"></i>
-                            Last updated: <span id="lastUpdated">@DateTime.Now.ToString("MMM dd, yyyy HH:mm")</span>
-                        </small>
-                    </div>
-                </div>
-            </div>
-        </div><!-- Loading Overlay -->
-        <div id="loadingOverlay" class="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
-             style="background: rgba(0,0,0,0.5); z-index: 9999; display: none !important;">
-            <div class="spinner-border text-light" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
+@* @model quizweb.Models.ApplicationUser *@
+@* @{ *@
+@*     ViewData["Title"] = "Profile"; *@
+@* } *@
+<div>
+    <h1>Profile</h1>
+    <div class="container">
+        <div>
+            <h2>@Model.Username</h2>
+            <p><strong>Full Name:</strong> <span class="editable" data-field="FullName">@Model.Fullname</span></p>
+            <p><strong>Email:</strong> <span class="editable" data-field="Email">@Model.Email</span></p>
+            <p><strong>Birthday:</strong> <span class="editable" data-field="BirthDay">@Model.Birthday</span></p>
         </div>
-
-        <!-- Toast Notifications -->
-        <div class="toast-container position-fixed top-0 end-0 p-3">
-            <div id="successToast" class="toast bg-success text-white" role="alert">
-                <div class="toast-header bg-success text-white">
-                    <i class="fas fa-check-circle me-2"></i>
-                    <strong class="me-auto">Success</strong>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
-                </div>
-                <div class="toast-body">
-                    Profile updated successfully!
-                </div>
-            </div>
-
-            <div id="errorToast" class="toast bg-danger text-white" role="alert">
-                <div class="toast-header bg-danger text-white">
-                    <i class="fas fa-exclamation-circle me-2"></i>
-                    <strong class="me-auto">Error</strong>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
-                </div>
-                <div class="toast-body">
-                    Failed to update profile. Please try again.
-                </div>
-            </div>
-        </div>
-
     </div>
 </div>
 
-@section Scripts {
-    <script src="~/js/inline-edit.js" asp-append-version="true"></script>
-}
+<style>
+    .editable {
+        cursor: pointer;
+        padding: 4px 8px;
+        border-bottom: 1px dashed #ccc;
+        display: inline-block;
+        min-width: 150px;
+    }
+    .editable:hover {
+        background-color: #f0f0f0;
+    }
+    .editing-input {
+        padding: 4px 8px;
+        border: 2px solid #007bff;
+        font-size: inherit;
+        font-family: inherit;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const editables = document.querySelectorAll('.editable');
+    
+    editables.forEach(span => {
+        span.addEventListener('click', function() {
+            if (this.querySelector('input')) return; // Đang edit rồi thì thôi
+            
+            const fieldName = this.dataset.field;
+            const currentValue = this.textContent;
+            
+            // Tạo input
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = currentValue;
+            input.className = 'editing-input';
+            
+            // Xóa text, thêm input
+            this.textContent = '';
+            this.appendChild(input);
+            input.focus();
+            
+            // Khi blur hoặc Enter → save
+            const saveEdit = async () => {
+                const newValue = input.value;
+                
+                if (newValue === currentValue) {
+                    // Không thay đổi → restore
+                    span.textContent = currentValue;
+                    return;
+                }
+                
+                try {
+                    // Gọi AJAX
+                    const response = await fetch('@Url.Action("UpdateField", "Profile")', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                        },
+                        body: JSON.stringify({
+                            fieldName: fieldName,
+                            value: newValue
+                        })
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        span.textContent = newValue;
+                    } else {
+                        alert('Error: ' + result.message);
+                        span.textContent = currentValue;
+                    }
+                } catch (error) {
+                    alert('Network error');
+                    span.textContent = currentValue;
+                }
+            };
+            
+            input.addEventListener('blur', saveEdit);
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    this.blur();
+                }
+            });
+        });
+    });
+});
+</script>
+
+@Html.AntiForgeryToken()

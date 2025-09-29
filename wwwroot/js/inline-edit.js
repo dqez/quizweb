@@ -71,16 +71,16 @@
         this.showLoading(true);
 
         try {
-            const reponse = await fetch('/Profile/Edit', {
+            const response = await fetch('/Profile/Edit', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'RequestVerificationToken': document.querySelector('[name="__RequestVerificationToken"]')?.value,
+                    'X-RequestVerificationToken': document.querySelector('[name="__RequestVerificationToken"]')?.value,
                 },
                 body: JSON.stringify({ field: fieldName, value: newValue })
             });
 
-            const result = await reponse.json();
+            const result = await response.json();
 
             if (result.success) {
                 displayValue.textContent = result.formattedValue || this.formatDisplayValue(fieldName, newValue);
@@ -88,7 +88,7 @@
                 editInput.dataset.original = newValue;
                 this.originalValues.delete(fieldName);
 
-                this.enterEditMode(field);
+                this.exitEditMode(field);
 
                 document.getElementById('lastUpdated').textContent = new Date().toLocaleString();
 
@@ -116,7 +116,7 @@
             editInput.value = originalValue;
         }
 
-        this.exitEditMode(field);
+        this.enterEditMode(field);
         this.originalValues.delete(fieldName);
     }
 
@@ -135,6 +135,20 @@
             this.cancelAllEdits();
         }
     }
+
+    exitEditMode(field) {
+        const displayValue = field.querySelector('.display-value');
+        const editInput = field.querySelector('.edit-input');
+        const editControls = field.querySelector('.edit-controls');
+        const editBtn = field.querySelector('.edit-btn');
+
+        // Switch back to display mode
+        displayValue.style.display = 'block';
+        editInput.style.display = 'none';
+        editControls.style.display = 'none';
+        editBtn.style.display = 'block';
+    }
+
 
     cancelAllEdits() {
         document.querySelectorAll('.edit-field').forEach(field => {

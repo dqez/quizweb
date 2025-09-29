@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using quizweb.DTOs;
 using quizweb.Services.Interfaces;
 using quizweb.ViewModels;
+using System.Globalization;
 
 namespace quizweb.Controllers
 {
@@ -22,7 +23,7 @@ namespace quizweb.Controllers
         // GET: ProfileController
         public async Task<IActionResult> Index()
         {
-            if(!User.Identity?.IsAuthenticated ==true)
+            if (!User.Identity?.IsAuthenticated == true)
             {
                 return Unauthorized();
             }
@@ -36,7 +37,7 @@ namespace quizweb.Controllers
             var viewModel = new UserEditViewModel
             {
                 Username = user.UserName!,
-                Birthday = user.BirthDay,
+                Birthday = user.BirthDay.ToString("dd/MM/yyyy"),
                 Email = user.Email!,
                 Fullname = user.FullName,
                 Sex = user.Sex,
@@ -60,15 +61,54 @@ namespace quizweb.Controllers
         // POST: ProfileController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> UpdateField([FromBody] UpdateFieldRequest request)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+
+                if (!User.Identity?.IsAuthenticated == true)
+                {
+                    return Json(new { success = false, message = "Unauthorized" });
+                }
+
+                var user = await _userService.GetProfileAsync(User.Identity?.Name!);
+
+                if (user == null)
+                {
+                    return Json(new { success = false, message = "User not found" });
+                }
+
+                switch (request.FieldName)
+                {
+                    case "FullName":
+                        user.FullName = request.Value;
+                        break;
+                    case "Email":
+                        user.Email = request.Value;
+                        user.NormalizedEmail = request.Value?.Trim().ToUpper();
+                        break;
+                    case "BirthDay":
+                        if (DateOnly.TryParseExact(request.Value, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var date))
+                        {
+                            user.BirthDay = date;
+                        }
+                        else
+                        {
+                            return Json(new { success = false, message = "Invalid date format" });
+                        }
+                        break;
+                    default:
+                        return Json(new { success = false, message = "Invalid field" });
+                }
+
+
+                await _userService.UpdateProfileAsync(user);
+                return Json(new { success = true, value = request.Value });
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                _logger.LogError(ex, "Error updating field");
+                return Json(new { success = false, message = "An error occurred while updating the field." });
             }
         }
 

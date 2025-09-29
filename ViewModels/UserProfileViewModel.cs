@@ -2,7 +2,7 @@
 
 namespace quizweb.ViewModels
 {
-    public class UserEditViewModel
+    public class UserProfileViewModel
     {
         [Required]
         [Display(Name = "Username")]
@@ -13,7 +13,7 @@ namespace quizweb.ViewModels
         public string Fullname { get; set; } = null!;
 
         [Display(Name = "Birthday")]
-        public string Birthday { get; set; } = null!;
+        public DateOnly Birthday { get; set; }
 
         [Display(Name = "Sex")]
         public bool Sex { get; set; }
