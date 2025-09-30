@@ -2,75 +2,106 @@
 @{
     ViewData["Title"] = "Profile";
 }
-@* @model quizweb.Models.ApplicationUser *@
-@* @{ *@
-@*     ViewData["Title"] = "Profile"; *@
-@* } *@
+@section Styles {
+    <link rel="stylesheet" href="~/css/inline-edit.css" />
+}
 <div>
     <h1>Profile</h1>
     <div class="container">
         <div>
-            <h2>@Model.Username</h2>
+            <h2>Username: @Model.Username</h2>
             <p><strong>Full Name:</strong> <span class="editable" data-field="FullName">@Model.Fullname</span></p>
             <p><strong>Email:</strong> <span class="editable" data-field="Email">@Model.Email</span></p>
             <p><strong>Birthday:</strong> <span class="editable" data-field="BirthDay">@Model.Birthday</span></p>
+            @Html.DropDownListFor(m => m.Sex, new List<SelectListItem> 
+            {
+            new SelectListItem {Text = "Male", Value = "True"},
+            new SelectListItem {Text = "Female", Value = "False"}
+            },
+                     new { @class = "form-control", onchange = "SelectChange(this)", data_field = "Sex" })
         </div>
     </div>
 </div>
+@Html.AntiForgeryToken()
+@section Scripts {
+    <script>
+                document.addEventListener('DOMContentLoaded', function () {
+            const editables = document.querySelectorAll('.editable');
 
-<style>
-    .editable {
-        cursor: pointer;
-        padding: 4px 8px;
-        border-bottom: 1px dashed #ccc;
-        display: inline-block;
-        min-width: 150px;
-    }
-    .editable:hover {
-        background-color: #f0f0f0;
-    }
-    .editing-input {
-        padding: 4px 8px;
-        border: 2px solid #007bff;
-        font-size: inherit;
-        font-family: inherit;
-    }
-</style>
+            editables.forEach(span => {
+                span.addEventListener('click', function () {
+                    if (this.querySelector('input')) return; // Đang edit rồi thì thôi
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const editables = document.querySelectorAll('.editable');
-    
-    editables.forEach(span => {
-        span.addEventListener('click', function() {
-            if (this.querySelector('input')) return; // Đang edit rồi thì thôi
-            
-            const fieldName = this.dataset.field;
-            const currentValue = this.textContent;
-            
-            // Tạo input
-            const input = document.createElement('input');
-            input.type = 'text';
-            input.value = currentValue;
-            input.className = 'editing-input';
-            
-            // Xóa text, thêm input
-            this.textContent = '';
-            this.appendChild(input);
-            input.focus();
-            
-            // Khi blur hoặc Enter → save
-            const saveEdit = async () => {
-                const newValue = input.value;
-                
-                if (newValue === currentValue) {
-                    // Không thay đổi → restore
-                    span.textContent = currentValue;
-                    return;
-                }
-                
+                    const fieldName = this.dataset.field;
+                    const currentValue = this.textContent;
+
+                    // Tạo input
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.value = currentValue;
+                    input.className = 'editing-input';
+
+                    // Xóa text, thêm input
+                    this.textContent = '';
+                    this.appendChild(input);
+                    input.focus();
+
+                    // Khi blur hoặc Enter → save
+                    const saveEdit = async () => {
+                        const newValue = input.value;
+
+                        if (newValue === currentValue) {
+                            // Không thay đổi → restore
+                            span.textContent = currentValue;
+                            return;
+                        }
+
+                        try {
+                            // Gọi AJAX
+                            const response = await fetch('@Url.Action("UpdateField", "Profile")', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                                },
+                                body: JSON.stringify({
+                                    fieldName: fieldName,
+                                    value: newValue
+                                })
+                            });
+
+                            const result = await response.json();
+
+                            if (result.success) {
+                                span.textContent = newValue;
+                            } else {
+                                alert('Error: ' + result.message);
+                                span.textContent = currentValue;
+                            }
+                        } catch (error) {
+                            alert('Network error');
+                            span.textContent = currentValue;
+                        }
+                    };
+
+                    input.addEventListener('blur', saveEdit);
+                    input.addEventListener('keypress', function (e) {
+                        if (e.key === 'Enter') {
+                            this.blur();
+                        }
+                    });
+                });
+            });
+        });
+
+        function SelectChange(select) {
+
+            const fieldName = select.dataset.field;
+            const value = select.value;
+            console.log(`selected: ${value}`);
+
+            const saveChange = async () => {
                 try {
-                    // Gọi AJAX
                     const response = await fetch('@Url.Action("UpdateField", "Profile")', {
                         method: 'POST',
                         headers: {
@@ -79,33 +110,29 @@ document.addEventListener('DOMContentLoaded', function() {
                         },
                         body: JSON.stringify({
                             fieldName: fieldName,
-                            value: newValue
+                            value: value
                         })
                     });
-                    
-                    const result = await response.json();
-                    
-                    if (result.success) {
-                        span.textContent = newValue;
-                    } else {
-                        alert('Error: ' + result.message);
-                        span.textContent = currentValue;
-                    }
-                } catch (error) {
-                    alert('Network error');
-                    span.textContent = currentValue;
-                }
-            };
-            
-            input.addEventListener('blur', saveEdit);
-            input.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    this.blur();
-                }
-            });
-        });
-    });
-});
-</script>
 
-@Html.AntiForgeryToken()
+                    const result = await response.json();
+
+                    if (result.success) {
+                        //re select default with new valu
+                    }
+                    else {
+                        alert('Error ' + result.message);
+                    }
+
+                } catch (e) {
+                    alert('tryCatch ajax saveChange');
+                }
+
+
+            }
+
+            saveChange();
+
+        }
+    </script>
+
+}

@@ -45,18 +45,7 @@ namespace quizweb.Controllers
             return View(viewModel);
         }
 
-        // GET: ProfileController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
 
-
-        // GET: ProfileController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
 
         // POST: ProfileController/Edit/5
         [HttpPost]
@@ -97,6 +86,16 @@ namespace quizweb.Controllers
                             return Json(new { success = false, message = "Invalid date format" });
                         }
                         break;
+                    case "Sex":
+                        if (bool.TryParse(request.Value,out var sex))
+                        {
+                            user.Sex = sex;
+                        }else 
+                        {
+                            return Json(new { success = false, message = "Invalid sex field" });
+                        }
+                        break;  
+
                     default:
                         return Json(new { success = false, message = "Invalid field" });
                 }
@@ -109,27 +108,6 @@ namespace quizweb.Controllers
             {
                 _logger.LogError(ex, "Error updating field");
                 return Json(new { success = false, message = "An error occurred while updating the field." });
-            }
-        }
-
-        // GET: ProfileController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: ProfileController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
             }
         }
     }

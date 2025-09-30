@@ -1,41 +1,19 @@
-﻿.edit-field {
-    transition: all 0.3s ease;
-    border-radius: 5px;
-    padding: 10px;
+﻿.editable {
+    cursor: pointer;
+    padding: 4px 8px;
+    border-bottom: 1px dashed #ccc;
+    display: inline-block;
+    min-width: 150px;
 }
 
-    .edit-field:hover {
-        background-color: #f8f9fa;
-    }
-
-.display-value {
-    min-height: 1.5em;
-    border-radius: 3px;
-    transition: all 0.2s ease;
+.editable:hover {
+    background-color: #f0f0f0;
 }
 
-.edit-input:focus {
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+.editing-input {
+    padding: 4px 8px;
+    border: 2px solid #007bff;
+    font-size: inherit;
+    font-family: inherit;
 }
 
-.btn-sm {
-    font-size: 0.875rem;
-}
-
-.invalid-feedback {
-    font-size: 0.875rem;
-}
-
-@keyframes pulse {
-    0% {
-        background-color: #d4edda;
-    }
-
-    100% {
-        background-color: transparent;
-    }
-}
-
-.bg-light {
-    animation: pulse 1s ease-in-out;
-}
