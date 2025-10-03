@@ -1,6 +1,6 @@
-﻿namespace quizweb.ViewModels
+﻿namespace quizweb.ViewModels.Answer
 {
-    public class AnswerViewModel
+    public class PlayAnswerViewModel
     {
         public int AnswerId { get; set; }
         public string AnswerText { get; set; } = null!;

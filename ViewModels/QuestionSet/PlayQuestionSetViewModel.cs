@@ -1,8 +1,9 @@
 ﻿using quizweb.Models;
+using quizweb.ViewModels.Question;
 
-namespace quizweb.ViewModels
+namespace quizweb.ViewModels.QuestionSet
 {
-    public class QuestionSetPlayViewModel
+    public class PlayQuestionSetViewModel
     {
         public int QSetId { get; set; }
 
@@ -16,6 +17,6 @@ namespace quizweb.ViewModels
 
         public string CategoryName { get; set; } = null!;
 
-        public List<QuestionViewModel> Questions { get; set; } = [];
+        public List<PlayQuestionViewModel> Questions { get; set; } = [];
     }
 }

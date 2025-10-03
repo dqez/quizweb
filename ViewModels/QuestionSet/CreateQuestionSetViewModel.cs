@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using quizweb.ViewModels.Question;
 using System.ComponentModel.DataAnnotations;
 
 namespace quizweb.ViewModels.QuestionSet
@@ -26,9 +27,9 @@ namespace quizweb.ViewModels.QuestionSet
         [Display(Name = "Category")]
         public int CategoryId { get; set; }
 
-        public List<QuestionViewModel> Questions { get; set; } = [];
+        public List<PlayQuestionViewModel> Questions { get; set; } = [];
 
         public List<SelectListItem> Levels { get; set; } = new();
-        public List<SelectListItem> Categories { get; set; } = new();
+        public List<SelectListItem> Categories { get; set; } = new();   
     }
 }
