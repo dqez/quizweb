@@ -27,6 +27,7 @@ builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
 builder.Services.AddScoped<IQuestionSetRepository, QuestionSetRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRankingRepository, RankingRepository>();
+builder.Services.AddScoped<IUnitOfWork, EfUnitOfWork>();
 //DI for services
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ILevelService, LevelService>();

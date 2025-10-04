@@ -17,7 +17,7 @@ namespace quizweb.Repositories.Implementations
         public async Task AddQuestionSetAsync(QuestionSet questionSet)
         {
             await _context.QuestionSets.AddAsync(questionSet);
-            await _context.SaveChangesAsync();
+            //await _context.SaveChangesAsync(); disable because using UoW
         }
 
         public async Task DeleteQuestionSetAsync(int id)
@@ -26,7 +26,7 @@ namespace quizweb.Repositories.Implementations
             if (qs != null)
             {
                 _context.QuestionSets.Remove(qs);
-                await _context.SaveChangesAsync();
+                //await _context.SaveChangesAsync(); disable because using UoW
             }
         }
 
@@ -59,7 +59,10 @@ namespace quizweb.Repositories.Implementations
 
         public Task UpdateQuestionSetAsync(QuestionSet questionSet)
         {
-            throw new NotImplementedException();
+            _context.QuestionSets.Update(questionSet);
+            //await _context.SaveChangesAsync(); disable because using UoW
+            return Task.CompletedTask;
+
         }
     }
 }

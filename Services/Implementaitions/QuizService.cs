@@ -6,11 +6,11 @@ using quizweb.ViewModels.QuestionSet;
 
 namespace quizweb.Services.Implementaitions
 {
-    public class CreateQuiz : ICreateQuiz
+    public class QuizService : IQuizService
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public CreateQuiz(IUnitOfWork unitOfWork)
+        public QuizService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
@@ -26,9 +26,25 @@ namespace quizweb.Services.Implementaitions
                 CategoryId = viewModel.CategoryId,
                 CreatedTime = DateTime.Now
             };
+            _unitOfWork.QuestionSetRepository.AddQuestionSetAsync
 
             //
 
+        }
+
+        public Task DeleteQuizAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task GetQuizAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateQuizAsync(UpdateQuestionSetViewModel viewModel, string authorName)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -17,7 +17,7 @@ namespace quizweb.Repositories.Implementations
         public async Task AddAnswerAsync(Answer answer)
         {
             await _context.Answers.AddAsync(answer);
-            await _context.SaveChangesAsync();
+            //await _context.SaveChangesAsync(); disable because using UoW
         }
 
         public async Task DeleteAnswerAsync(int id)
@@ -26,14 +26,14 @@ namespace quizweb.Repositories.Implementations
             if (answer != null)
             {
                 _context.Answers.Remove(answer);
-                await _context.SaveChangesAsync();
+                //await _context.SaveChangesAsync(); disable because using UoW
             }
         }
 
-        public async Task UpdateAnswerAsync(Answer answer)
+        public void UpdateAnswerAsync(Answer answer)
         {
             _context.Answers.Update(answer);
-            await _context.SaveChangesAsync();
+            //await _context.SaveChangesAsync(); disable because using UoW
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using quizweb.Data;
+using quizweb.Models;
 using quizweb.Repositories.Interfaces;
 
 namespace quizweb.Repositories.Implementations
@@ -7,11 +8,13 @@ namespace quizweb.Repositories.Implementations
     public class EfUnitOfWork : IUnitOfWork
     {
         private readonly AppDbContext _context;
+        private IDbContextTransaction? _transaction;
+
         private readonly IQuestionSetRepository _qsRepo;
         private readonly IQuestionRepository _qRepo;
         private readonly IAnswerRepository _aRepo;
 
-        private IDbContextTransaction? _tx;
+        private bool _disposed;
 
         public EfUnitOfWork(AppDbContext context, IQuestionSetRepository qsRepo, IQuestionRepository qRepo, IAnswerRepository aRepo)
         {
@@ -21,38 +24,71 @@ namespace quizweb.Repositories.Implementations
             _aRepo = aRepo;
         }
 
-        public IQuestionSetRepository QuestionSetRepository => throw new NotImplementedException();
+        public IQuestionSetRepository QuestionSetRepository => _qsRepo;
 
-        public IQuestionRepository QuestionRepository => throw new NotImplementedException();
+        public IQuestionRepository QuestionRepository => _qRepo;
 
-        public IAnswerRepository AnswerRepository => throw new NotImplementedException();
+        public IAnswerRepository AnswerRepository => _aRepo;
+
 
         public async Task BeginTransactionAsync()
         {
-            if (_tx == null)
+            if (_transaction != null)
             {
-                _tx = await _context.Database.BeginTransactionAsync();
+                return;
+            }
+            _transaction = await _context.Database.BeginTransactionAsync();
+        }
+
+        public async Task CommitAsync()
+        {
+            if (_transaction == null)
+            {
+                throw new InvalidOperationException("The transaction has not been initiated yet.");
+            }
+
+            try
+            {
+                await _context.SaveChangesAsync();
+                await _transaction.CommitAsync();
+            }
+            finally
+            {
+                await _transaction.DisposeAsync();
+                _transaction = null;
             }
         }
 
-        public Task CommitAsync()
+        public async ValueTask DisposeAsync()
         {
-            throw new NotImplementedException();
+            if (_disposed)
+            {
+                if (_transaction != null)
+                {
+                    await _transaction.DisposeAsync();
+                    _transaction = null;
+                }
+
+                await _context.DisposeAsync();
+                _disposed = true;
+            }
+
+            GC.SuppressFinalize(this);
         }
 
-        public ValueTask DisposeAsync()
+        public async Task RollbackAsync()
         {
-            throw new NotImplementedException();
+            if (_transaction != null)
+            {
+                await _transaction.RollbackAsync();
+                await _transaction.DisposeAsync();
+                _transaction = null;
+            }
         }
 
-        public Task RollbackAsync()
+        public async Task<int> SaveChangesAsync()
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<int> SaveChangesAsync()
-        {
-            throw new NotImplementedException();
+            return await _context.SaveChangesAsync();
         }
     }
 }
