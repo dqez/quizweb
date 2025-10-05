@@ -18,17 +18,54 @@ namespace quizweb.Services.Implementaitions
         public async Task CreateQuizAsync(CreateQuestionSetViewModel viewModel, string authorName)
         {
             await _unitOfWork.BeginTransactionAsync();
-            var qs = new QuestionSet {
-                QSetName = viewModel.QSetName,
-                Description = viewModel.Description,
-                AuthorName = authorName,
-                LevelId = viewModel.LevelId,
-                CategoryId = viewModel.CategoryId,
-                CreatedTime = DateTime.Now
-            };
-            _unitOfWork.QuestionSetRepository.AddQuestionSetAsync
 
-            //
+            try
+            {
+                var qs = new QuestionSet
+                {
+                    QSetName = viewModel.QSetName,
+                    Description = viewModel.Description,
+                    AuthorName = authorName,
+                    LevelId = viewModel.LevelId,
+                    CategoryId = viewModel.CategoryId,
+                    CreatedTime = DateTime.Now,
+                };
+                await _unitOfWork.QuestionSetRepository.AddQuestionSetAsync(qs);
+                await _unitOfWork.SaveChangesAsync();
+
+                foreach (var q in viewModel.Questions)
+                {
+                    var question = new Question
+                    {
+                        QuestionText = q.QuestionText,
+                        QSetId = qs.QSetId,
+                    };
+                    await _unitOfWork.QuestionRepository.AddQuestionAsync(question);
+                    await _unitOfWork.SaveChangesAsync();
+
+                    foreach (var a in q.Answers)
+                    {
+                        var answer = new Answer
+                        {
+                            QuestionId = question.QuestionId,
+                            AnswerText = a.AnswerText,
+                            IsCorrect = a.IsCorrect,
+
+                        };
+                        await _unitOfWork.AnswerRepository.AddAnswerAsync(answer);
+                    }
+
+                }
+                await _unitOfWork.SaveChangesAsync();
+                await _unitOfWork.CommitAsync();
+
+            }
+            catch (Exception)
+            {
+
+                await _unitOfWork.RollbackAsync();
+                throw;
+            }
 
         }
 

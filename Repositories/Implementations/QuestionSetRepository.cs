@@ -57,12 +57,10 @@ namespace quizweb.Repositories.Implementations
                 .FirstOrDefaultAsync();
         }
 
-        public Task UpdateQuestionSetAsync(QuestionSet questionSet)
+        public void UpdateQuestionSetAsync(QuestionSet questionSet)
         {
             _context.QuestionSets.Update(questionSet);
             //await _context.SaveChangesAsync(); disable because using UoW
-            return Task.CompletedTask;
-
         }
     }
 }

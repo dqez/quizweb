@@ -27,7 +27,7 @@ namespace quizweb.ViewModels.QuestionSet
         [Display(Name = "Category")]
         public int CategoryId { get; set; }
 
-        public List<PlayQuestionViewModel> Questions { get; set; } = [];
+        public List<CreateQuestionViewModel> Questions { get; set; } = [];
 
         public List<SelectListItem> Levels { get; set; } = new();
         public List<SelectListItem> Categories { get; set; } = new();   

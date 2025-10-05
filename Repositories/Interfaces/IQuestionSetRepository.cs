@@ -8,7 +8,7 @@ namespace quizweb.Repositories.Interfaces
         Task<IEnumerable<QuestionSet>> GetAllCreatedQuestionSetsByUsernameAsync(string username);
         Task<QuestionSet?> GetQuestionSetByIdAsync(int id);
         Task AddQuestionSetAsync(QuestionSet questionSet);
-        Task UpdateQuestionSetAsync(QuestionSet questionSet);
+        void UpdateQuestionSetAsync(QuestionSet questionSet);
         Task DeleteQuestionSetAsync(int id);
     }
 }

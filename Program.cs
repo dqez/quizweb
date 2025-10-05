@@ -28,6 +28,7 @@ builder.Services.AddScoped<IQuestionSetRepository, QuestionSetRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRankingRepository, RankingRepository>();
 builder.Services.AddScoped<IUnitOfWork, EfUnitOfWork>();
+builder.Services.AddScoped<IAnswerRepository, AnswerRepository>();
 //DI for services
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ILevelService, LevelService>();
@@ -38,6 +39,7 @@ builder.Services.AddScoped<IQuestionSetService, QuestionSetService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRankingService, RankingService>();
 builder.Services.AddScoped<IFileService, FileService>();
+builder.Services.AddScoped<IQuizService, QuizService>();
 
 var app = builder.Build();
 

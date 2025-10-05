@@ -30,6 +30,16 @@ namespace quizweb.Repositories.Implementations
             }
         }
 
+        public async Task<IEnumerable<Answer>> GetAllAnswersByIdQuestionAsync(int idQuestion)
+        {
+            return await _context.Answers.Where(a => a.QuestionId == idQuestion).ToListAsync();
+        }
+
+        public async Task<Answer?> GetAnswerByIdAsync(int id)
+        {
+            return await _context.Answers.FindAsync(id);
+        }
+
         public void UpdateAnswerAsync(Answer answer)
         {
             _context.Answers.Update(answer);

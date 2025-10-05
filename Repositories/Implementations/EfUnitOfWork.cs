@@ -49,7 +49,6 @@ namespace quizweb.Repositories.Implementations
 
             try
             {
-                await _context.SaveChangesAsync();
                 await _transaction.CommitAsync();
             }
             finally
@@ -61,7 +60,7 @@ namespace quizweb.Repositories.Implementations
 
         public async ValueTask DisposeAsync()
         {
-            if (_disposed)
+            if (!_disposed)
             {
                 if (_transaction != null)
                 {
