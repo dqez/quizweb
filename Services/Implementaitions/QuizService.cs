@@ -69,9 +69,28 @@ namespace quizweb.Services.Implementaitions
 
         }
 
-        public Task DeleteQuizAsync(int id)
+        public async Task DeleteQuizAsync(int idQset)
         {
-            throw new NotImplementedException();
+            await _unitOfWork.BeginTransactionAsync();
+            try
+            {
+                var answers = await _unitOfWork.AnswerRepository.GetAllAnswersByQSetIdAsync(idQset);
+                await _unitOfWork.AnswerRepository.DeleteAnswerAsync(idQset);
+                var questions = _unitOfWork.QuestionRepository.GetAllQuestionsByIdQSetAsync(idQset);
+                await _unitOfWork.QuestionRepository.DeleteQuestionAsync(idQset);
+
+                var questionSet = _unitOfWork.QuestionSetRepository.DeleteQuestionSetAsync(idQset);
+
+                await _unitOfWork.SaveChangesAsync();
+                await _unitOfWork.CommitAsync();
+
+            }
+            catch (Exception)
+            {
+
+                await _unitOfWork.RollbackAsync();
+                throw;
+            }
         }
 
         public Task GetQuizAsync(int id)

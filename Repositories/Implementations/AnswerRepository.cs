@@ -35,6 +35,11 @@ namespace quizweb.Repositories.Implementations
             return await _context.Answers.Where(a => a.QuestionId == idQuestion).ToListAsync();
         }
 
+        public async Task<IEnumerable<Answer>> GetAllAnswersByQSetIdAsync(int idQset)
+        {
+            return await _context.Answers.Where(a => a.Question.QSetId == idQset).ToListAsync();
+        }
+
         public async Task<Answer?> GetAnswerByIdAsync(int id)
         {
             return await _context.Answers.FindAsync(id);
