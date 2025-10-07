@@ -8,6 +8,7 @@ namespace quizweb.Repositories.Interfaces
         Task<IEnumerable<Question>> GetAllQuestionsByIdQSetAsync(int idQSet);
         Task AddQuestionAsync(Question question);
         void UpdateQuestionAsync(Question question);
-        Task DeleteQuestionAsync(int id);
+        void DeleteQuestionAsync(Question question);
+        void DeleteQuestionsAsync(IEnumerable<Question> questions);
     }
 }

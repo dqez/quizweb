@@ -20,14 +20,10 @@ namespace quizweb.Repositories.Implementations
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteProgressQuestionSet(int id)
+        public async Task DeleteProgressQuestionSet(ProgressQuestionSet progressQuestionSet)
         {
-            var pqs = await _context.ProgressQuestionSets.FindAsync(id);
-            if (pqs != null)
-            {
-                _context.ProgressQuestionSets.Remove(pqs);
+                _context.ProgressQuestionSets.Remove(progressQuestionSet);
                 await _context.SaveChangesAsync();
-            }
         }
 
         public async Task<IEnumerable<ProgressQuestionSet>> GetAllProgressQuestionSets(string username)

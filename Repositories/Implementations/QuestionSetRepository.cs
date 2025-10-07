@@ -20,14 +20,10 @@ namespace quizweb.Repositories.Implementations
             //await _context.SaveChangesAsync(); disable because using UoW
         }
 
-        public async Task DeleteQuestionSetAsync(int id)
+        public void DeleteQuestionSetAsync(QuestionSet questionSet)
         {
-            var qs = await _context.QuestionSets.FindAsync(id);
-            if (qs != null)
-            {
-                _context.QuestionSets.Remove(qs);
+                _context.QuestionSets.Remove(questionSet);
                 //await _context.SaveChangesAsync(); disable because using UoW
-            }
         }
 
         public async Task<IEnumerable<QuestionSet>> GetAllCreatedQuestionSetsByUsernameAsync(string username)

@@ -20,14 +20,14 @@ namespace quizweb.Repositories.Implementations
             //await _context.SaveChangesAsync(); disable because using UoW
         }
 
-        public async Task DeleteAnswerAsync(int id)
+        public void DeleteAnswerAsync(Answer answer)
         {
-            var answer = await _context.Answers.FindAsync(id);
-            if (answer != null)
-            {
-                _context.Answers.Remove(answer);
-                //await _context.SaveChangesAsync(); disable because using UoW
-            }
+            _context.Answers.Remove(answer);
+        }
+
+        public void DeleteAnswersAsync(IEnumerable<Answer> answers)
+        {
+            _context.Answers.RemoveRange(answers);
         }
 
         public async Task<IEnumerable<Answer>> GetAllAnswersByIdQuestionAsync(int idQuestion)

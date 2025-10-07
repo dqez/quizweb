@@ -20,13 +20,14 @@ namespace quizweb.Repositories.Implementations
             await _context.Questions.AddAsync(question);
         }
 
-        public async Task DeleteQuestionAsync(int id)
+        public void DeleteQuestionAsync(Question question)
         {
-            var question = await _context.Questions.FindAsync(id);
-            if (question != null)
-            {
-                _context.Questions.Remove(question);
-            }
+            _context.Questions.Remove(question);
+        }
+
+        public void DeleteQuestionsAsync(IEnumerable<Question> questions)
+        {
+            _context.Questions.RemoveRange(questions);
         }
 
         public async Task<IEnumerable<Question>> GetAllQuestionsByIdQSetAsync(int idQSet)

@@ -8,7 +8,7 @@ namespace quizweb.Repositories.Interfaces
         Task<Category?> GetCategoryByIdAsync(int categoryId);
         Task AddCategoryAsync(Category category);
         Task UpdateCategoryAsync(Category category);
-        Task DeleteCategoryAsync(int categoryId);
+        Task DeleteCategoryAsync(Category category);
 
     }
 }

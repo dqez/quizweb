@@ -6,6 +6,6 @@ namespace quizweb.Repositories.Interfaces
     {
         Task<IEnumerable<MarkedQuestion>> GetAllMarkedQuestionsAsync(string username);
         Task AddMarkedQuestion(MarkedQuestion markedQuestion);
-        Task RemoveMarkedQuestion(int id);
+        Task RemoveMarkedQuestion(MarkedQuestion markedQuestion);
     }
 }

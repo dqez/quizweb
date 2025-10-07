@@ -75,11 +75,22 @@ namespace quizweb.Services.Implementaitions
             try
             {
                 var answers = await _unitOfWork.AnswerRepository.GetAllAnswersByQSetIdAsync(idQset);
-                await _unitOfWork.AnswerRepository.DeleteAnswerAsync(idQset);
-                var questions = _unitOfWork.QuestionRepository.GetAllQuestionsByIdQSetAsync(idQset);
-                await _unitOfWork.QuestionRepository.DeleteQuestionAsync(idQset);
+                if (answers != null)
+                {
+                     _unitOfWork.AnswerRepository.DeleteAnswersAsync(answers);
+                }
 
-                var questionSet = _unitOfWork.QuestionSetRepository.DeleteQuestionSetAsync(idQset);
+                var questions = await _unitOfWork.QuestionRepository.GetAllQuestionsByIdQSetAsync(idQset);
+                if (questions != null)
+                {
+                    _unitOfWork.QuestionRepository.DeleteQuestionsAsync(questions);
+                }
+
+                var questionSet = await _unitOfWork.QuestionSetRepository.GetQuestionSetByIdAsync(idQset);
+                if (questionSet != null)
+                {
+                    _unitOfWork.QuestionSetRepository.DeleteQuestionSetAsync(questionSet);
+                }
 
                 await _unitOfWork.SaveChangesAsync();
                 await _unitOfWork.CommitAsync();

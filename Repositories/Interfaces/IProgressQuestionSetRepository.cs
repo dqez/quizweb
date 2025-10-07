@@ -8,7 +8,7 @@ namespace quizweb.Repositories.Interfaces
         Task<ProgressQuestionSet?> GetProgressQuestionSetById(int id);
         Task AddProgressQuestionSet(ProgressQuestionSet progressQuestionSet);
         Task UpdateProgressQuestionSet(ProgressQuestionSet progressQuestionSet);
-        Task DeleteProgressQuestionSet(int id);
+        Task DeleteProgressQuestionSet(ProgressQuestionSet progressQuestionSet);
 
     }
 }

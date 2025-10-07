@@ -8,6 +8,6 @@ namespace quizweb.Repositories.Interfaces
         Task<Level?> GetLevelByIdAsync(int id);
         Task AddLevelAsync(Level level);
         Task UpdateLevelAsync(Level level);
-        Task DeleteLevelAsync(int id);
+        Task DeleteLevelAsync(Level level);
     }
 }

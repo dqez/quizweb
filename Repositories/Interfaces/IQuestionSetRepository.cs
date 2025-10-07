@@ -9,6 +9,6 @@ namespace quizweb.Repositories.Interfaces
         Task<QuestionSet?> GetQuestionSetByIdAsync(int id);
         Task AddQuestionSetAsync(QuestionSet questionSet);
         void UpdateQuestionSetAsync(QuestionSet questionSet);
-        Task DeleteQuestionSetAsync(int id);
+        void DeleteQuestionSetAsync(QuestionSet questionSet);
     }
 }

@@ -26,14 +26,10 @@ namespace quizweb.Repositories.Implementations
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteLevelAsync(int id)
+        public async Task DeleteLevelAsync(Level level)
         {
-            var level = await _context.Levels.FindAsync(id);
-            if (level != null)
-            {
                 _context.Levels.Remove(level);
                 await _context.SaveChangesAsync();
-            }
         }
 
         public async Task<IEnumerable<Level>> GetAllLevelsAsync()
