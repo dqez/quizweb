@@ -13,9 +13,15 @@ namespace quizweb.Services.Implementaitions
             _questionRepository = questionRepository;
         }
 
-        public async Task<Question?> GetQuestionByIdAsync(int id)
+        public async Task<Question> GetQuestionByIdAsync(int id)
         {
-            return await _questionRepository.GetQuestionByIdAsync(id);
+             
+            var q = await _questionRepository.GetQuestionByIdAsync(id);
+            if (q == null)
+            {
+                throw new Exception("Question not found");
+            }
+            return q;
         }
     }
 }

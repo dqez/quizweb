@@ -25,7 +25,11 @@ namespace quizweb.Services.Implementaitions
 
         public async Task DeleteProgressQuestionSet(int id)
         {
-            await _progressQuestionSetRepository.DeleteProgressQuestionSet(id);
+            var pqs = await _progressQuestionSetRepository.GetProgressQuestionSetById(id);
+            if (pqs != null)
+            {
+                await _progressQuestionSetRepository.DeleteProgressQuestionSet(pqs);
+            }
         }
 
         public async Task<List<ProgressQuestionSet>> GetAllProgressQuestionSets(string username)

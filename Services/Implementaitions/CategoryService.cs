@@ -34,7 +34,11 @@ namespace quizweb.Services.Implementaitions
 
         public async Task DeleteCategoryAsync(int categoryId)
         {
-            await _categoryRepository.DeleteCategoryAsync(categoryId);
+            var cate = await _categoryRepository.GetCategoryByIdAsync(categoryId);
+            if (cate != null)
+            {
+                await _categoryRepository.DeleteCategoryAsync(cate);
+            }
         }
 
         public async Task<List<Category>> GetAllCategoryAsync()

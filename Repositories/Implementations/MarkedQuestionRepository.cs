@@ -25,6 +25,11 @@ namespace quizweb.Repositories.Implementations
             return await _context.MarkedQuestions.Where(mq => mq.UserName == username).ToListAsync();
         }
 
+        public async Task<MarkedQuestion?> GetMarkedQuestionByIdAsync(int id)
+        {
+            return await _context.MarkedQuestions.FindAsync(id);
+        }
+
         public async Task RemoveMarkedQuestion(MarkedQuestion markedQuestion)
         {
                 _context.MarkedQuestions.Remove(markedQuestion);

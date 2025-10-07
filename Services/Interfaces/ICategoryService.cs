@@ -5,11 +5,11 @@ namespace quizweb.Services.Interfaces
 {
     public interface ICategoryService
     {
-        public Task AddCategoryAsync(CategoryCreateViewModel category);
-        public Task UpdateCategoryAsync(Category category);
-        public Task DeleteCategoryAsync(int categoryId);
-        public Task<List<Category>> GetAllCategoryAsync();
-        public Task<Category> GetCategoryByIdAsync(int categoryId);
+         Task AddCategoryAsync(CategoryCreateViewModel category);
+         Task UpdateCategoryAsync(Category category);
+         Task DeleteCategoryAsync(int categoryId);
+         Task<List<Category>> GetAllCategoryAsync();
+         Task<Category> GetCategoryByIdAsync(int categoryId);
 
 
     }

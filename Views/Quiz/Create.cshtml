@@ -1,0 +1,52 @@
+﻿@model quizweb.ViewModels.QuestionSet.CreateQuestionSetViewModel
+@{
+    ViewData["Title"] = "Create Quiz";
+}
+
+<h1>Create a New Quiz</h1>
+<div>
+    <form action="/Create" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div>
+            <label asp-for="QSetName" class="control-label"></label>
+            <input asp-for="QSetName" class="form-control"/>
+            <span asp-validation-for="QSetName" class="text-danger"></span>
+        </div>
+        <div>
+            <label asp-for="Description" class="control-label"></label>
+            <input asp-for="Description" class="form-control" />
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+        <div>
+            <label asp-for="LevelId" class="control-label"></label>
+            <input asp-for="LevelId" class="form-control"/>
+            <span asp-validation-for="LevelId" class="text-danger"></span>
+        </div>
+        <div>
+            <label asp-for="CategoryId" class="control-label"></label>
+            <input asp-for="CategoryId" class="form-control" />
+            <span asp-validation-for="CategoryId" class="text-danger"></span>
+        </div>
+        <div id="questionDiv">Question</div>
+        <button onchange="newQuestion()"></button>
+        <div>
+            <input type="submit" value="Create" class="btn btn-primary" />
+        </div>
+    </form>
+</div>
+
+@section Scripts{
+    <script>
+        function newQuestion(){
+            const question = `
+            <<div>
+                <label asp-for="Question.QuestionText" class="control-label"><label>
+                <input asp-for="Question.QuestionText" class="form-control"/>
+                <span asp-validation-for="Question.Text" class="text-danger"></span>
+            </div>`
+            
+            const qDiv = document.getElementById('questionDiv');
+            qDiv.innerHTML(question)
+        }
+    </script>
+}

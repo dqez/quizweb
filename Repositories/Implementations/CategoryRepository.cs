@@ -29,8 +29,8 @@ namespace quizweb.Repositories.Implementations
 
         public async Task DeleteCategoryAsync(Category category)
         {
-                _context.Categories.Remove(category);
-                await _context.SaveChangesAsync();
+            _context.Categories.Remove(category);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<Category>> GetAllCategoryAsync()

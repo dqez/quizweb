@@ -13,9 +13,14 @@ namespace quizweb.Services.Implementaitions
             _questionSetRepository = questionSetRepository;
         }
 
-        public async Task<QuestionSet?> GetQuestionSetRandomByIdCateAndIdLevel(int idCate, int idLevel)
+        public async Task<QuestionSet> GetQuestionSetRandomByIdCateAndIdLevel(int idCate, int idLevel)
         {
-           return await _questionSetRepository.GetQuestionSetRandomByIdCateAndIdLevel(idCate, idLevel);
+            var qs = await _questionSetRepository.GetQuestionSetRandomByIdCateAndIdLevel(idCate, idLevel);
+            if (qs == null)
+            {
+                throw new Exception("QuestionSetRandom is not found");
+            }
+            return qs;
         }
 
         public async Task<List<QuestionSet>> GetAllCreatedQuestionSetsAsync(string username)
@@ -23,9 +28,14 @@ namespace quizweb.Services.Implementaitions
             return (await _questionSetRepository.GetAllCreatedQuestionSetsByUsernameAsync(username)).ToList();
         }
 
-        public async Task<QuestionSet?> GetQuestionSetByIdAsync(int id)
+        public async Task<QuestionSet> GetQuestionSetByIdAsync(int id)
         {
-            return await _questionSetRepository.GetQuestionSetByIdAsync(id);
+            var qs = await _questionSetRepository.GetQuestionSetByIdAsync(id);
+            if (qs == null)
+            {
+                throw new Exception("QuestionSetRandom is not found");
+            }
+            return qs;
         }
     }
 }

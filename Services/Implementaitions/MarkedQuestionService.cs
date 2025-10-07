@@ -25,7 +25,11 @@ namespace quizweb.Services.Implementaitions
 
         public async Task RemoveMarkedQuestion(int id)
         {
-            await _markedQuestionRepository.RemoveMarkedQuestion(id);
+            var mq = await _markedQuestionRepository.GetMarkedQuestionByIdAsync(id);
+            if (mq != null)
+            {
+                await _markedQuestionRepository.RemoveMarkedQuestion(mq);
+            }
         }
     }
 }

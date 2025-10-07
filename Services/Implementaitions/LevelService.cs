@@ -24,7 +24,11 @@ namespace quizweb.Services.Implementaitions
 
         public async Task DeleteLevelAsync(int id)
         {
-            await _levelRepository.DeleteLevelAsync(id);
+            var level = await _levelRepository.GetLevelByIdAsync(id);
+            if (level != null)
+            {
+                await _levelRepository.DeleteLevelAsync(level);
+            }
         }
 
         public async Task<List<Level>> GetAllLevelsAsync()
@@ -32,9 +36,14 @@ namespace quizweb.Services.Implementaitions
             return (await _levelRepository.GetAllLevelsAsync()).ToList();
         }
 
-        public async Task<Level?> GetLevelByIdAsync(int id)
+        public async Task<Level> GetLevelByIdAsync(int id)
         {
-            return await _levelRepository.GetLevelByIdAsync(id);
+            var level = await _levelRepository.GetLevelByIdAsync(id);
+            if (level == null)
+            {
+                throw new Exception("Level not found");
+            }
+            return level;
         }
 
     }

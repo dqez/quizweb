@@ -4,6 +4,6 @@ namespace quizweb.Services.Interfaces
 {
     public interface IQuestionService
     {
-        public Task<Question?> GetQuestionByIdAsync(int id);
+        public Task<Question> GetQuestionByIdAsync(int id);
     }
 }
