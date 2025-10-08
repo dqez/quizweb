@@ -5,48 +5,162 @@
 
 <h1>Create a New Quiz</h1>
 <div>
-    <form action="/Create" method="post">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <form asp-action="Create" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div> @*its mean to alert error from model attributed*@
         <div>
-            <label asp-for="QSetName" class="control-label"></label>
-            <input asp-for="QSetName" class="form-control"/>
-            <span asp-validation-for="QSetName" class="text-danger"></span>
+            <h3>Quiz Information</h3>
+            <div>
+                <label asp-for="QSetName" class="control-label"></label>
+                <input asp-for="QSetName" class="form-control" />
+                <span asp-validation-for="QSetName" class="text-danger"></span>
+            </div>
+            <div>
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div>
+                <label asp-for="LevelId" class="control-label"></label>
+                @* <input asp-for="LevelId" class="form-control" /> *@
+                <select asp-for="Levels" class="form-select">
+                    <option value="">-- Select Level --</option>
+                </select>
+                <span asp-validation-for="LevelId" class="text-danger"></span>
+            </div>
+            <div>
+                <label asp-for="CategoryId" class="control-label"></label>
+                @* <input asp-for="CategoryId" class="form-control" /> *@
+                <select asp-for="CategoryId" class="form-select">
+                    <option value="">-- Select Category --</option>
+                </select>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+            <div>
+                <h3>Question</h3>
+                <button type="button" class="btn btn-sm btn-success" onclick="addQuestion()">
+                    + Add Question
+                </button>
+                <div>
+                    <div id="questionsContainer">
+                    </div>
+                </div>
+            </div>
         </div>
-        <div>
-            <label asp-for="Description" class="control-label"></label>
-            <input asp-for="Description" class="form-control" />
-            <span asp-validation-for="Description" class="text-danger"></span>
-        </div>
-        <div>
-            <label asp-for="LevelId" class="control-label"></label>
-            <input asp-for="LevelId" class="form-control"/>
-            <span asp-validation-for="LevelId" class="text-danger"></span>
-        </div>
-        <div>
-            <label asp-for="CategoryId" class="control-label"></label>
-            <input asp-for="CategoryId" class="form-control" />
-            <span asp-validation-for="CategoryId" class="text-danger"></span>
-        </div>
-        <div id="questionDiv">Question</div>
-        <button onchange="newQuestion()"></button>
         <div>
             <input type="submit" value="Create" class="btn btn-primary" />
         </div>
     </form>
+
+    <template id="questionTemplate">
+        <div class="question-item" data-question-index="">
+            <div>
+                <span>Question <span class="question-number"></span></span>
+                <button type="button" onclick="removeQuestion(this)">Remove</button>
+            </div>
+            <div>
+                <div>
+                    <label class="form-label">Question Text</label>
+                    <input type="text" name="Questions[INDEX].QuestionText" class="form-control" required/>
+                </div>
+
+                <div>
+                    <label class="form-label">Answers</label>
+                    <div class="answer-items">
+
+                    </div>
+                    <button type="button" class="btn btn-sm btn-secondary" onclick="addAnswer(this)"> + Add Answer</button>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="answerTemplate">
+        <div class="input-group mb-2 answer-item">
+            <div class="input-group-text">
+                <input type="checkbox" name="Questions[QINDEX].Answers[AINDEX].IsCorrect" class="form-check-input" title="Correct answer"/>
+            </div>
+            <input type="text" name="Question[QINDEX].Answers[AINDEX].AnswerText" class="form-control" placeholder="Answer text" required/>
+            <button type="button" class="btn btn-outline-danger" onclick="removeAnswer(this)">&times;</button>
+        </div>
+    </template>
 </div>
 
-@section Scripts{
+@section Scripts {
     <script>
-        function newQuestion(){
-            const question = `
-            <<div>
-                <label asp-for="Question.QuestionText" class="control-label"><label>
-                <input asp-for="Question.QuestionText" class="form-control"/>
-                <span asp-validation-for="Question.Text" class="text-danger"></span>
-            </div>`
-            
-            const qDiv = document.getElementById('questionDiv');
-            qDiv.innerHTML(question)
+
+        let questionIndex = 0;
+
+        function addQuestion(){
+            const template = document.getElementById('questionTemplate');
+            const clone = template.content.cloneNode(true);
+
+            const questionDiv = clone.querySelector('.question-item');
+            questionDiv.setAttribute('data-question-index', questionIndex);
+            questionDiv.querySelector('.question-number').textContent = questionIndex + 1;
+
+            const inputs = clone.querySelectorAll('[name*="INDEX"]');
+            inputs.forEach(input => {
+                input.name = input.name.replace('INDEX', questionIndex);
+            });
+
+            const answerContainer = clone.querySelector('.answer-items');
+            for(let i = 0; i < 2; i++){
+                const answerHtml = createAnswer(questionIndex, i);
+                answerContainer.insertAdjacentHTML('beforeend', answerHtml);
+            }
+
+            document.getElementById('questionsContainer').appendChild(clone);
+            questionIndex++;
         }
+
+
+        function createAnswer(qIndex, aIndex){
+            const template = document.getElementById('answerTemplate');
+            const clone = template.content.cloneNode(true);
+            const div = document.createElement('div');
+            div.appendChild(clone);
+
+            let html = div.innerHTML;
+            html = html.replace(/QINDEX/g, qIndex);
+            html = html.replace(/AINDEX/g, aIndex);
+
+            return html;
+        }
+
+
+        function addAnswer(button){
+            const questionDiv = button.closest('.question-item');
+            const qIndex = questionDiv.getAttribute('data-question-index');
+            const answerItems = questionDiv.querySelector('.answer-items')
+            const currentAnswerCount = answerItems.querySelectorAll('.answer-item');
+            
+            const answerHtml = createAnswer(qIndex, currentAnswerCount);
+            answerItems.insertAdjacentHTML('beforeend', answerHtml);
+        }
+
+        function removeQuestion(button){
+            button.closest('.question-item').remove();
+            updateQuestionNumbers();
+        }
+
+        function removeAnswer(button){
+            const answerItem = button.closest('.answer-items');
+            if (answerItem.querySelectorAll('.answer-item').length >2){
+                button.closest('.answer-item').remove();
+            }else{
+                alert('A question must have at least 2 answers!');
+            }
+        }
+
+
+        function updateQuestionNumbers(){
+            document.querySelectorAll('.question-item').forEach((item, index) => {
+                item.querySelector('question-number').textContent = index + 1;
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function(){
+            addQuestion();
+        });
     </script>
 }
