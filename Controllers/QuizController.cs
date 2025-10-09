@@ -30,21 +30,10 @@ namespace quizweb.Controllers
 
         public async Task<IActionResult> Create()
         {
-            var levelList = await _levelService.GetAllLevelsAsync();
-            var cateList = await _categoryService.GetAllCategoryAsync();
-            var viewModel = new CreateQuestionSetViewModel
-            {
-                Levels = levelList.Select(l => new SelectListItem
-                {
-                    Text = l.LevelName,
-                    Value = l.LevelId.ToString()
-                }).ToList(),
-                Categories = cateList.Select(c => new SelectListItem
-                {
-                    Text = c.CategoryName,
-                    Value = c.CategoryId.ToString()
-                }).ToList()
-            };
+            var viewModel = new CreateQuestionSetViewModel();
+            
+            await GetAddSelectItemList(viewModel);
+
             return View(viewModel);
         }
 
@@ -62,15 +51,36 @@ namespace quizweb.Controllers
                         return NotFound();
                     }
                     await _quizService.CreateQuizAsync(viewModel, username);
-
+                    return RedirectToAction("Index", "Quiz");
                 }
                 catch (Exception ex)
                 {
                     ModelState.AddModelError("", "Failed to create quiz: " + ex.Message);
-                    return View(viewModel);
                 }
             }
-            return RedirectToAction("Index", "Home");
+
+            await GetAddSelectItemList(viewModel);
+            return View(viewModel);
         }
+
+
+        private async Task GetAddSelectItemList(CreateQuestionSetViewModel viewModel)
+        {
+            var levelList = await _levelService.GetAllLevelsAsync();
+            var cateList = await _categoryService.GetAllCategoryAsync();
+
+            viewModel.Levels = levelList.Select(l => new SelectListItem
+            {
+                Text = l.LevelName,
+                Value = l.LevelId.ToString()
+            }).ToList();
+
+            viewModel.Categories = cateList.Select(c => new SelectListItem
+            {
+                Text = c.CategoryName,
+                Value = c.CategoryId.ToString()
+            }).ToList();
+        }
+
     }
 }
