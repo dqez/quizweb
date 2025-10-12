@@ -82,5 +82,10 @@ namespace quizweb.Controllers
             }).ToList();
         }
 
+        public async Task<IActionResult> Play()
+        {
+            var viewModel = await _quizService.GetRandomQuizAsync();
+            return View(viewModel);
+        }
     }
 }

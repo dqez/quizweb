@@ -1,4 +1,5 @@
-﻿using quizweb.ViewModels.QuestionSet;
+﻿using quizweb.ViewModels.Question;
+using quizweb.ViewModels.QuestionSet;
 
 namespace quizweb.Services.Interfaces
 {
@@ -9,5 +10,6 @@ namespace quizweb.Services.Interfaces
         Task DeleteQuizAsync(int id);
 
         Task GetQuizAsync(int id);
+        Task<PlayQuestionSetViewModel> GetRandomQuizAsync();
     }
 }

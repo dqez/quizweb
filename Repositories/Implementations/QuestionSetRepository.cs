@@ -36,6 +36,11 @@ namespace quizweb.Repositories.Implementations
             return await _context.QuestionSets.FindAsync(id);
         }
 
+        public async Task<QuestionSet?> GetQuestionSetRandomByNewGuidAsync()
+        {
+            return await _context.QuestionSets.OrderBy(q => Guid.NewGuid()).FirstOrDefaultAsync();
+        }
+
         public async Task<QuestionSet?> GetQuestionSetRandomByIdCateAndIdLevel(int idCate, int idLevel)
         {
             var count = await _context.QuestionSets.CountAsync(qs => qs.CategoryId == idCate && qs.LevelId == idLevel);

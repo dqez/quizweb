@@ -2,6 +2,8 @@
 using quizweb.Models;
 using quizweb.Repositories.Interfaces;
 using quizweb.Services.Interfaces;
+using quizweb.ViewModels.Answer;
+using quizweb.ViewModels.Question;
 using quizweb.ViewModels.QuestionSet;
 
 namespace quizweb.Services.Implementaitions
@@ -77,7 +79,7 @@ namespace quizweb.Services.Implementaitions
                 var answers = await _unitOfWork.AnswerRepository.GetAllAnswersByQSetIdAsync(idQset);
                 if (answers != null)
                 {
-                     _unitOfWork.AnswerRepository.DeleteAnswersAsync(answers);
+                    _unitOfWork.AnswerRepository.DeleteAnswersAsync(answers);
                 }
 
                 var questions = await _unitOfWork.QuestionRepository.GetAllQuestionsByIdQSetAsync(idQset);
@@ -109,9 +111,40 @@ namespace quizweb.Services.Implementaitions
             throw new NotImplementedException();
         }
 
+        public async Task<PlayQuestionSetViewModel> GetRandomQuizAsync()
+        {
+            var qs = await _unitOfWork.QuestionSetRepository.GetQuestionSetRandomByNewGuidAsync();
+            if (qs == null)
+            {
+                throw new Exception("GetQuestionSetRandomByNewGuid is not found");
+            }
+            var viewModel = new PlayQuestionSetViewModel
+            {
+                QSetId = qs.QSetId,
+                QSetName = qs.QSetName,
+                Description = qs.Description,
+                AuthorName = qs.AuthorName,
+                CategoryName = qs.Category.CategoryName,
+                LevelName = qs.Level.LevelName,
+                Questions = qs.Questions.Select(q => new PlayQuestionViewModel
+                {
+                    QuestionId = q.QuestionId,
+                    QuestionText = q.QuestionText,
+                    Answers = q.Answers.Select(a => new PlayAnswerViewModel
+                    {
+                        AnswerId = a.AnswerId,
+                        AnswerText = a.AnswerText
+                    }).ToList()
+                }).ToList()
+
+            };
+            return viewModel;
+        }
+
         public Task UpdateQuizAsync(UpdateQuestionSetViewModel viewModel, string authorName)
         {
             throw new NotImplementedException();
         }
+
     }
 }
