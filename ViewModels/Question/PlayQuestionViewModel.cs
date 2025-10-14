@@ -7,6 +7,6 @@ namespace quizweb.ViewModels.Question
         public int QuestionId { get; set; }
         public string QuestionText { get; set; } = null!;
         public List<PlayAnswerViewModel> Answers { get; set; } = [];
-        public int? SelectAnswerId { get; set; }
+        //public int? SelectAnswerId { get; set; }
     }
 }

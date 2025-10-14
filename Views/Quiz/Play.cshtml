@@ -1,0 +1,26 @@
+﻿@model quizweb.ViewModels.QuestionSet.PlayQuestionSetViewModel;
+@{
+    ViewBag.Title = "Play Quiz";
+}
+
+<h2>Play Quiz: @Model.QSetName</h2>
+<h3>Description: @Model.Description</h3>
+<h3>Level: @Model.LevelName</h3>
+<h3>Category: @Model.CategoryName</h3>
+<h3>By: @Model.AuthorName</h3>
+
+@{
+    foreach (var q in Model.Questions)
+    {
+        <div class="QuestionText">Question: @q.QuestionText</div>
+        <div class="Options">
+            
+            @{
+                foreach (var a in q.Answers)
+                {
+                    <input type="radio" name="@a.AnswerText" value="@a.AnswerId" /> @a.AnswerText <br />
+                }
+            }
+        </div>
+    }
+}

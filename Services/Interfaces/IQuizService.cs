@@ -9,7 +9,8 @@ namespace quizweb.Services.Interfaces
         Task UpdateQuizAsync(UpdateQuestionSetViewModel viewModel, string authorName);
         Task DeleteQuizAsync(int id);
 
-        Task GetQuizAsync(int id);
+        Task<PlayQuestionSetViewModel> GetQuizAsync(int id);
+        Task<QuizResultViewModel> SubmitQuizAsync(SubmitQuizViewModel submitModel, string username);
         Task<PlayQuestionSetViewModel> GetRandomQuizAsync();
     }
 }

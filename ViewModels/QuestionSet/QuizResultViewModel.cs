@@ -17,8 +17,5 @@
         public int UserSelecteAnswerId { get; set; }
         public int CorrectAnswerId { get; set; }
         public bool IsCorrect { get; set; }
-        public string UserAnswerText { get; set; } = null!;
-        public string CorrectAnswerText { get; set; } = null;
-
     }
 }

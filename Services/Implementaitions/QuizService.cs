@@ -106,9 +106,35 @@ namespace quizweb.Services.Implementaitions
             }
         }
 
-        public Task GetQuizAsync(int id)
+        public async Task<PlayQuestionSetViewModel> GetQuizAsync(int id)
         {
-            throw new NotImplementedException();
+            var qs = await _unitOfWork.QuestionSetRepository.GetQuestionSetByIdAsync(id);
+            if (qs == null)
+            {
+                throw new Exception($"Quiz with ID {id} not found");
+            }
+
+            var viewModel = new PlayQuestionSetViewModel
+            {
+                QSetId = qs.QSetId,
+                QSetName = qs.QSetName,
+                Description = qs.Description,
+                AuthorName = qs.AuthorName,
+                CategoryName = qs.Category.CategoryName,
+                LevelName = qs.Level.LevelName,
+                Questions = qs.Questions.Select(q => new PlayQuestionViewModel
+                {
+                    QuestionId = q.QuestionId,
+                    QuestionText = q.QuestionText,
+                    Answers = q.Answers.Select(a => new PlayAnswerViewModel
+                    {
+                        AnswerId = a.AnswerId,
+                        AnswerText = a.AnswerText,
+                    }).ToList()
+                }).ToList()
+            };
+
+            return viewModel;
         }
 
         public async Task<PlayQuestionSetViewModel> GetRandomQuizAsync()
@@ -133,12 +159,17 @@ namespace quizweb.Services.Implementaitions
                     Answers = q.Answers.Select(a => new PlayAnswerViewModel
                     {
                         AnswerId = a.AnswerId,
-                        AnswerText = a.AnswerText
+                        AnswerText = a.AnswerText,
                     }).ToList()
                 }).ToList()
 
             };
             return viewModel;
+        }
+
+        public Task<QuizResultViewModel> SubmitQuizAsync(SubmitQuizViewModel submitModel, string username)
+        {
+            throw new NotImplementedException();
         }
 
         public Task UpdateQuizAsync(UpdateQuestionSetViewModel viewModel, string authorName)
