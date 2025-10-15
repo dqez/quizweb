@@ -39,6 +39,7 @@ namespace quizweb.Repositories.Implementations
         public async Task<QuestionSet?> GetQuestionSetRandomByNewGuidAsync()
         {
             return await _context.QuestionSets
+                .AsNoTracking()
                 .Include(qs => qs.Category)
                 .Include(qs => qs.Level)
                 .Include(qs => qs.Questions)
@@ -58,6 +59,7 @@ namespace quizweb.Repositories.Implementations
             var randIndex = rand.Next(count);
 
             return await _context.QuestionSets
+                .AsNoTracking()
                 .Where(qs => qs.CategoryId == idCate && qs.LevelId == idLevel)
                 .Skip(randIndex)
                 .FirstOrDefaultAsync();

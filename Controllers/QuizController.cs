@@ -82,10 +82,18 @@ namespace quizweb.Controllers
             }).ToList();
         }
 
+        [HttpGet]
         public async Task<IActionResult> Play()
         {
             var viewModel = await _quizService.GetRandomQuizAsync();
             return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Play(SubmitQuizViewModel submitQuiz)
+        {
+            
         }
     }
 }

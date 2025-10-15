@@ -9,18 +9,40 @@
 <h3>Category: @Model.CategoryName</h3>
 <h3>By: @Model.AuthorName</h3>
 
-@{
-    foreach (var q in Model.Questions)
+<form asp-action="Play" method="post">
+    <input type="hidden" name="QSetId" value="@Model.QSetId" />
+
+    @for (int i = 0; i < Model.Questions.Count; i++)
     {
-        <div class="QuestionText">Question: @q.QuestionText</div>
-        <div class="Options">
-            
-            @{
-                foreach (var a in q.Answers)
+        var q = Model.Questions[i];
+
+        <div>
+            <input type="hidden" name="UserAnswers[@i].QuestionId" value="@q.QuestionId" />
+            <div class="QuestionText">Question: @q.QuestionText</div>
+            <div class="Options">
+
+                @for (int j = 0; j < q.Answers.Count; j++)
                 {
-                    <input type="radio" name="@a.AnswerText" value="@a.AnswerId" /> @a.AnswerText <br />
+                    var a = q.Answers[j];
+                    var inputId = $"question_{q.QuestionId}_answer_{a.AnswerId}";
+
+
+                    <div>
+                        <input type="radio" id="@inputId" name="UserAnswers[@i].SelectedAnswerId" value="@a.AnswerId" class="answer-radio" required/>
+                        <label asp-for="@a.AnswerText">
+                            @a.AnswerText
+                        </label>
+                        <br />
+                    </div>
                 }
-            }
+            </div>
         </div>
     }
-}
+
+    <div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    </div>
+
+
+</form>
