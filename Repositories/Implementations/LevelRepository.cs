@@ -34,7 +34,7 @@ namespace quizweb.Repositories.Implementations
 
         public async Task<IEnumerable<Level>> GetAllLevelsAsync()
         {
-            return await _context.Levels.ToListAsync();
+            return await _context.Levels.AsNoTracking().ToListAsync();
         }
 
         public async Task<Level?> GetLevelByIdAsync(int id)

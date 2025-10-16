@@ -28,7 +28,7 @@ namespace quizweb.Repositories.Implementations
 
         public async Task<IEnumerable<QuestionSet>> GetAllCreatedQuestionSetsByUsernameAsync(string username)
         {
-            return await _context.QuestionSets.Where(qs => qs.AuthorName == username).ToListAsync();
+            return await _context.QuestionSets.AsNoTracking().Where(qs => qs.AuthorName == username).ToListAsync();
         }
 
         public async Task<QuestionSet?> GetQuestionSetByIdAsync(int id)

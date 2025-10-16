@@ -2,7 +2,7 @@
 using quizweb.Repositories.Interfaces;
 using quizweb.Services.Interfaces;
 
-namespace quizweb.Repositories.Implementations
+namespace quizweb.Services.Implementaitions
 {
     public class RankingService : IRankingService
     {

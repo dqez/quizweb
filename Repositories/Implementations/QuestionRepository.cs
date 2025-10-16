@@ -32,7 +32,7 @@ namespace quizweb.Repositories.Implementations
 
         public async Task<IEnumerable<Question>> GetAllQuestionsByIdQSetAsync(int idQSet)
         {
-            return await _context.Questions.Where(q => q.QSetId == idQSet).ToListAsync();
+            return await _context.Questions.AsNoTracking().Where(q => q.QSetId == idQSet).ToListAsync();
         }
 
         public async Task<Question?> GetQuestionByIdAsync(int id)

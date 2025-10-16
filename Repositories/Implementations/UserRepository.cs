@@ -19,25 +19,25 @@ namespace quizweb.Repositories.Implementations
         public async Task<IEnumerable<QuestionSet>> GetCreatedQuestionSetsAsync(string username)
 
         {
-            return await _context.QuestionSets.Where(qs => qs.AuthorName == username).ToListAsync();
+            return await _context.QuestionSets.AsNoTracking().Where(qs => qs.AuthorName == username).ToListAsync();
         }
 
         public async Task<IEnumerable<MarkedQuestion>> GetMarkedQuestionAsync(string username)
 
         {
-            return await _context.MarkedQuestions.Where(mq => mq.UserName == username).ToListAsync();
+            return await _context.MarkedQuestions.AsNoTracking().Where(mq => mq.UserName == username).ToListAsync();
         }
 
         public async Task<IEnumerable<ProgressQuestionSet>> GetProgressQuestionSetsAsync(string username)
 
         {
-            return await _context.ProgressQuestionSets.Where(pqs => pqs.UserName == username).ToListAsync();
+            return await _context.ProgressQuestionSets.AsNoTracking().Where(pqs => pqs.UserName == username).ToListAsync();
         }
 
         public async Task<ApplicationUser?> GetProfileAsync(string username)
 
         {
-            return await _context.Users.Where(u => u.UserName == username).FirstOrDefaultAsync();
+            return await _context.Users.AsNoTracking().Where(u => u.UserName == username).FirstOrDefaultAsync();
         }
 
         public async Task UpdateProfileAsync(ApplicationUser user)

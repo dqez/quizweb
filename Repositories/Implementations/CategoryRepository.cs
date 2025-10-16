@@ -35,7 +35,7 @@ namespace quizweb.Repositories.Implementations
 
         public async Task<IEnumerable<Category>> GetAllCategoryAsync()
         {
-            return await _context.Categories.ToListAsync();
+            return await _context.Categories.AsNoTracking().ToListAsync();
         }
 
         public async Task<Category?> GetCategoryByIdAsync(int categoryId)

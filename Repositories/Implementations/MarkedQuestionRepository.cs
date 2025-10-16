@@ -22,7 +22,7 @@ namespace quizweb.Repositories.Implementations
 
         public async Task<IEnumerable<MarkedQuestion>> GetAllMarkedQuestionsAsync(string username)
         {
-            return await _context.MarkedQuestions.Where(mq => mq.UserName == username).ToListAsync();
+            return await _context.MarkedQuestions.AsNoTracking().Where(mq => mq.UserName == username).ToListAsync();
         }
 
         public async Task<MarkedQuestion?> GetMarkedQuestionByIdAsync(int id)
