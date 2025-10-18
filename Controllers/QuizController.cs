@@ -93,7 +93,24 @@ namespace quizweb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Play(SubmitQuizViewModel submitQuiz)
         {
-            
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var username = User.Identity?.Name;
+                    if (username == null)
+                    {
+                        return NotFound();
+                    }
+                    var quizResultViewModel = await _quizService.SubmitQuizAsync(submitQuiz, username);
+
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+            }
         }
     }
 }

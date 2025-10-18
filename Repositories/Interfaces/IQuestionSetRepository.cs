@@ -1,4 +1,5 @@
-﻿using quizweb.Models;
+﻿using quizweb.DTOs;
+using quizweb.Models;
 
 namespace quizweb.Repositories.Interfaces
 {
@@ -7,6 +8,7 @@ namespace quizweb.Repositories.Interfaces
         Task<QuestionSet?> GetQuestionSetByIdAsync(int id);
         Task<QuestionSet?> GetQuestionSetRandomByNewGuidAsync();
         Task<QuestionSet?> GetQuestionSetRandomByIdCateAndIdLevel(int idCate, int idLevel);
+        Task<IEnumerable<CorrectAnswerDTO>> GetCorrectAnswerSetByIdAsync(int id);
         Task<IEnumerable<QuestionSet>> GetAllCreatedQuestionSetsByUsernameAsync(string username);
         Task AddQuestionSetAsync(QuestionSet questionSet);
         void UpdateQuestionSetAsync(QuestionSet questionSet);

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using quizweb.Data;
+using quizweb.DTOs;
 using quizweb.Models;
 using quizweb.Repositories.Interfaces;
 
@@ -33,7 +34,12 @@ namespace quizweb.Repositories.Implementations
 
         public async Task<QuestionSet?> GetQuestionSetByIdAsync(int id)
         {
-            return await _context.QuestionSets.FindAsync(id);
+            return await _context.QuestionSets
+                .AsNoTracking()
+                .Include(qs => qs.Questions)
+                    .ThenInclude(q => q.Answers)
+                .Where(qs => qs.QSetId == id)
+                .FirstOrDefaultAsync();
         }
 
         public async Task<QuestionSet?> GetQuestionSetRandomByNewGuidAsync()
@@ -69,6 +75,21 @@ namespace quizweb.Repositories.Implementations
         {
             _context.QuestionSets.Update(questionSet);
             //await _context.SaveChangesAsync(); disable because using UoW
+        }
+
+        public async Task<IEnumerable<CorrectAnswerDTO>>GetCorrectAnswerSetByIdAsync(int id)
+        {
+            return await _context.Questions
+                .AsNoTracking()
+                .Where(q => q.QSetId == id)
+                .Select(q => new CorrectAnswerDTO
+                {
+                    QuestionId = q.QuestionId,
+                    CorrectAnswerIds = q.Answers
+                        .Where(a => a.IsCorrect)
+                        .Select(a => a.AnswerId)
+                        .ToList()
+                }).ToListAsync();
         }
     }
 }

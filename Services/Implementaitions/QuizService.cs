@@ -167,9 +167,11 @@ namespace quizweb.Services.Implementaitions
             return viewModel;
         }
 
-        public Task<QuizResultViewModel> SubmitQuizAsync(SubmitQuizViewModel submitModel, string username)
+        public async Task<QuizResultViewModel> SubmitQuizAsync(SubmitQuizViewModel submitModel, string username)
         {
-            throw new NotImplementedException();
+            var listQAnswer = await _unitOfWork.QuestionSetRepository.GetCorrectAnswerSetByIdAsync(submitModel.QSetId);
+            //for loop to compare answers and count correct answers: UserAnswers vs CorrectAnswers (questionid, SelectedAnswerId vs CorrectAnswerId) 
+            
         }
 
         public Task UpdateQuizAsync(UpdateQuestionSetViewModel viewModel, string authorName)
