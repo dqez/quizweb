@@ -5,6 +5,7 @@ using quizweb.Services.Interfaces;
 using quizweb.ViewModels.Answer;
 using quizweb.ViewModels.Question;
 using quizweb.ViewModels.QuestionSet;
+using System.Linq;
 
 namespace quizweb.Services.Implementaitions
 {
@@ -170,8 +171,42 @@ namespace quizweb.Services.Implementaitions
         public async Task<QuizResultViewModel> SubmitQuizAsync(SubmitQuizViewModel submitModel, string username)
         {
             var listQAnswer = await _unitOfWork.QuestionSetRepository.GetCorrectAnswerSetByIdAsync(submitModel.QSetId);
-            //for loop to compare answers and count correct answers: UserAnswers vs CorrectAnswers (questionid, SelectedAnswerId vs CorrectAnswerId) 
-            
+            var correctAnswersDict = listQAnswer.ToDictionary(key => key.QuestionId, values => values.CorrectAnswerIds);
+            int score = 0;
+            var questionsResult = new List<QuestionResultViewModel>(submitModel.UserAnswers.Count);
+
+            foreach (var question in submitModel.UserAnswers)
+            {
+                bool isCorrect = false;
+                int correctAnswerId = 0;
+
+                if (correctAnswersDict.TryGetValue(question.QuestionId, out var correctAnswerIdSet))
+                {
+
+                    correctAnswerId = correctAnswerIdSet.FirstOrDefault(); //get first correct answer id for useranswer incorrect case
+                    isCorrect = correctAnswerIdSet.Contains(question.SelectedAnswerId);
+
+                    if (isCorrect)
+                    {
+                        score++;
+                    }
+                }
+                questionsResult.Add(new QuestionResultViewModel
+                {
+                    QuestionId = question.QuestionId,
+                    UserSelecteAnswerId = question.SelectedAnswerId,
+                    CorrectAnswerId = correctAnswerId,
+                    IsCorrect = isCorrect
+                });
+            }
+            return new QuizResultViewModel
+            {
+                QSetId = submitModel.QSetId,
+                QSetName = submitModel.QSetName,
+                TotalQuestions = listQAnswer.Count(),
+                Score = score,
+                QuestionResults = questionsResult
+            };
         }
 
         public Task UpdateQuizAsync(UpdateQuestionSetViewModel viewModel, string authorName)

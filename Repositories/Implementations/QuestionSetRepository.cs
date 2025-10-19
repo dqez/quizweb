@@ -88,7 +88,7 @@ namespace quizweb.Repositories.Implementations
                     CorrectAnswerIds = q.Answers
                         .Where(a => a.IsCorrect)
                         .Select(a => a.AnswerId)
-                        .ToList()
+                        .ToHashSet()
                 }).ToListAsync();
         }
     }

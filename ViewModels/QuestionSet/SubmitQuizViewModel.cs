@@ -8,6 +8,9 @@ namespace quizweb.ViewModels.QuestionSet
         [Range(1, int.MaxValue, ErrorMessage = "Invalid Question Set ID")]
         public int QSetId { get; set; }
 
+        [Required(ErrorMessage = "Question Set Name is required")]
+        public string QSetName { get; set; } = null!;
+
         [Required(ErrorMessage = "User answers are required")]
         [MinLength(1, ErrorMessage = "At least one answer is required")]
         public List<UserAnswerViewModel> UserAnswers { get; set; } = [];
