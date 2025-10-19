@@ -170,6 +170,13 @@ namespace quizweb.Services.Implementaitions
 
         public async Task<QuizResultViewModel> SubmitQuizAsync(SubmitQuizViewModel submitModel, string username)
         {
+
+            if (submitModel?.UserAnswers == null || !submitModel.UserAnswers.Any())
+            {
+                throw new ArgumentException("No answers provided");
+            }
+
+
             var listQAnswer = await _unitOfWork.QuestionSetRepository.GetCorrectAnswerSetByIdAsync(submitModel.QSetId);
             var correctAnswersDict = listQAnswer.ToDictionary(key => key.QuestionId, values => values.CorrectAnswerIds);
             int score = 0;
