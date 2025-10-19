@@ -171,13 +171,26 @@ namespace quizweb.Services.Implementaitions
         public async Task<QuizResultViewModel> SubmitQuizAsync(SubmitQuizViewModel submitModel, string username)
         {
 
+            if (submitModel == null)
+            {
+                throw new ArgumentNullException(nameof(submitModel));
+            }
+            if (string.IsNullOrWhiteSpace(username))
+            {
+                throw new ArgumentException("Username is required", nameof(username));
+            }
             if (submitModel?.UserAnswers == null || !submitModel.UserAnswers.Any())
             {
                 throw new ArgumentException("No answers provided");
             }
 
-
             var listQAnswer = await _unitOfWork.QuestionSetRepository.GetCorrectAnswerSetByIdAsync(submitModel.QSetId);
+
+            if (listQAnswer == null)
+            {
+                throw new Exception($"Quiz with ID {submitModel.QSetId} not found");
+            }
+
             var correctAnswersDict = listQAnswer.ToDictionary(key => key.QuestionId, values => values.CorrectAnswerIds);
             int score = 0;
             var questionsResult = new List<QuestionResultViewModel>(submitModel.UserAnswers.Count);
