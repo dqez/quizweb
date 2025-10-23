@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using quizweb.Services.Implementaitions;
 using quizweb.Services.Interfaces;
 using quizweb.ViewModels.QuestionSet;
+using System.Text.Json;
 
 namespace quizweb.Controllers
 {
@@ -31,7 +31,7 @@ namespace quizweb.Controllers
         public async Task<IActionResult> Create()
         {
             var viewModel = new CreateQuestionSetViewModel();
-            
+
             await GetAddSelectItemList(viewModel);
 
             return View(viewModel);
@@ -103,14 +103,32 @@ namespace quizweb.Controllers
                         return NotFound();
                     }
                     var quizResultViewModel = await _quizService.SubmitQuizAsync(submitQuiz, username);
-
+                    if (quizResultViewModel == null)
+                    {
+                        return NotFound();
+                    }
+                    //return RedirectToAction("Result", quizResultViewModel); => Redirection with complex objects: http302, objects serialized to query string, lost nested objects
+                    TempData["QuizResult"] = JsonSerializer.Serialize(quizResultViewModel);
+                    return RedirectToAction("Result");
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-
-                    throw;
+                    _logger.LogError(ex, "Error submitting quiz");
+                    ModelState.AddModelError("", "An error occurred while submitting the quiz.");
+                    return View(submitQuiz);
                 }
             }
+            return View(submitQuiz);
+        }
+
+        public IActionResult Result()
+        {
+            if (TempData["QuizResult"] is string json)
+            {
+                var viewModel = JsonSerializer.Deserialize<QuizResultViewModel>(json);
+                return View(viewModel);
+            }
+            return RedirectToAction("Index");
         }
     }
 }

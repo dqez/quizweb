@@ -12,10 +12,12 @@ namespace quizweb.Services.Implementaitions
     public class QuizService : IQuizService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IRankingService _rankingService;
 
-        public QuizService(IUnitOfWork unitOfWork)
+        public QuizService(IUnitOfWork unitOfWork, IRankingService rankingService)
         {
             _unitOfWork = unitOfWork;
+            _rankingService = rankingService;
         }
 
         public async Task CreateQuizAsync(CreateQuestionSetViewModel viewModel, string authorName)
@@ -219,6 +221,8 @@ namespace quizweb.Services.Implementaitions
                     IsCorrect = isCorrect
                 });
             }
+            await _rankingService.UpdateUserScoreAsync(username, score);
+
             return new QuizResultViewModel
             {
                 QSetId = submitModel.QSetId,
@@ -227,6 +231,7 @@ namespace quizweb.Services.Implementaitions
                 Score = score,
                 QuestionResults = questionsResult
             };
+            
         }
 
         public Task UpdateQuizAsync(UpdateQuestionSetViewModel viewModel, string authorName)
