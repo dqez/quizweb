@@ -422,5 +422,3 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
-/Services/Implementaitions/QuizService.cs
-/Services/Implementaitions/QuizService.cs

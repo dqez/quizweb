@@ -226,15 +226,14 @@ namespace quizweb.Services.Implementaitions
 
                 answeredQuestions.Add(new AnsweredQuestion
                 {
+                    UserName = username,
+                    QSetId = submitModel.QSetId,
                     QuestionId = question.QuestionId,
                     SelectedAnswerId = question.SelectedAnswerId
                 });
             }
             
-            {
-
-            }
-            await _answeredQuestionService.AddAnsweredQuestion()
+            await _answeredQuestionService.AddAnsweredQuestions(answeredQuestions);
             await _rankingService.UpdateUserScoreAsync(username, score);
 
             return new QuizResultViewModel

@@ -20,6 +20,12 @@ namespace quizweb.Repositories.Implementations
             await _context.SaveChangesAsync();
         }
 
+        public async Task AddAnsweredQuestionsAsync(List<AnsweredQuestion> answeredQuestions)
+        {
+            await _context.AnsweredQuestions.AddRangeAsync(answeredQuestions);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<List<AnsweredQuestion>> GetAllAnsweredQuestions(string username, int QSetId)
         {
             return await _context.AnsweredQuestions.AsNoTracking().Where(aq => aq.UserName == username && aq.QSetId == QSetId).ToListAsync();

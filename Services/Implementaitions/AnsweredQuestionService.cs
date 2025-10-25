@@ -18,6 +18,11 @@ namespace quizweb.Services.Implementaitions
             await _answeredQuestion.AddAnsweredQuestionAsync(answeredQuestion);
         }
 
+        public async Task AddAnsweredQuestions(List<AnsweredQuestion> answeredQuestions)
+        {
+            await _answeredQuestion.AddAnsweredQuestionsAsync(answeredQuestions);
+        }
+
         public async Task<List<AnsweredQuestion>> GetAllAnsweredQuestions(string username, int Qsetid)
         {
             return await _answeredQuestion.GetAllAnsweredQuestions(username, Qsetid);
