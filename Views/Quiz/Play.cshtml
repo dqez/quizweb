@@ -9,7 +9,7 @@
 <h3>Category: @Model.CategoryName</h3>
 <h3>By: @Model.AuthorName</h3>
 
-<form asp-action="Play" method="post">
+<form asp-action="Play" method="post" id="quizForm">
     <input type="hidden" name="QSetId" value="@Model.QSetId" />
     <input type="hidden" name="QSetName" value="@Model.QSetName" />
 
@@ -29,7 +29,7 @@
 
 
                     <div>
-                        <input type="radio" id="@inputId" name="UserAnswers[@i].SelectedAnswerId" value="@a.AnswerId" class="answer-radio" required/>
+                        <input type="radio" id="@inputId" name="UserAnswers[@i].SelectedAnswerId" value="@a.AnswerId" class="answer-radio" required />
                         <label asp-for="@a.AnswerText">
                             @a.AnswerText
                         </label>
@@ -41,9 +41,177 @@
     }
 
     <div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        <button type="submit" class="btn btn-primary" id="submitBtn">Submit</button>
+        <a asp-action="Index" class="btn btn-secondary cancel-link" id="cancelBtn" data-confirm="true">Cancel</a>
     </div>
 
-
 </form>
+
+@section Scripts {
+    <script>
+
+                (function () {
+                    const form = document.getElementById('quizForm');
+                    let dirty = false;
+
+                    // 1) Mark dirty when any answer selected
+                    document.querySelectorAll('.answer-radio').forEach(radio => {
+                        radio.addEventListener('change', () => {
+                            dirty = true;
+                        });
+                    });
+
+                    // 2) On standard submit, clear dirty (server will handle final submission)
+                    form.addEventListener('submit', () => {
+                        dirty = false;
+                        // allow normal submit
+                    });
+
+                    // 3) beforeunload native prompt
+                    window.addEventListener('beforeunload', function (e) {
+                        if (!dirty) return;
+                        // Standard message not customizable in modern browsers
+                        const confirmationMessage = 'You have unsaved progress. Do you really want to leave?';
+                        (e || window.event).returnValue = confirmationMessage;
+                        return confirmationMessage;
+                    });
+
+                    // Helper: gather current form data into FormData
+                    function gatherFormData() {
+                        return new FormData(form);
+                    }
+
+                    // 4) save progress via AJAX POST
+                    function saveProgress() {
+                        // add a field SaveProgress so server knows it's a partial save (server action should inspect this)
+                        const fd = gatherFormData();
+                        fd.append('SaveProgress', 'true');
+
+                        // Use fetch to POST to the form action
+                        const url = form.action || window.location.href;
+
+                        return fetch(url, {
+                            method: 'POST',
+                            body: fd,
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest' // indicates AJAX
+                            },
+                            credentials: 'same-origin'
+                        }).then(response => {
+                            if (!response.ok) throw new Error('Save failed');
+                            return response;
+                        });
+                    }
+
+                    // 5) Confirm + navigation helper
+                    function confirmAndNavigate(targetUrl) {
+                        if (!dirty) {
+                            window.location.href = targetUrl;
+                            return;
+                        }
+
+                        const shouldSave = confirm('You have unsaved progress. Save progress before leaving? Click OK to save, Cancel to leave without saving.');
+                        if (shouldSave) {
+                            // optionally show a simple saving indicator
+                            const originalText = document.activeElement && document.activeElement.innerText;
+                            // perform save
+                            saveProgress()
+                                .then(() => {
+                                    dirty = false;
+                                    window.location.href = targetUrl;
+                                })
+                                .catch(err => {
+                                    // if save failed, ask user whether to still navigate
+                                    const navigateAnyway = confirm('Saving progress failed. Leave anyway?');
+                                    if (navigateAnyway) {
+                                        dirty = false;
+                                        window.location.href = targetUrl;
+                                    }
+                                });
+                        } else {
+                            // user chose not to save
+                            dirty = false;
+                            window.location.href = targetUrl;
+                        }
+                    }
+
+                    // 6) Intercept cancel link
+                    const cancelBtn = document.getElementById('cancelBtn');
+                    if (cancelBtn) {
+                        cancelBtn.addEventListener('click', function (ev) {
+                            ev.preventDefault();
+                            const target = cancelBtn.getAttribute('href') || cancelBtn.getAttribute('data-href') || cancelBtn.getAttribute('asp-action') || cancelBtn.href;
+                            // Use href if present, else fallback to asp-action mapping (simple fallback: go to form's action root)
+                            const navUrl = cancelBtn.href || target || '@Url.Action("Index", "Quiz")';
+                            confirmAndNavigate(navUrl);
+                        });
+                    }
+
+                    // 7) Intercept navbar links (common pattern) - add data-confirm="true" to links you want protected
+                    // Protect links that have class 'nav-link' or attribute data-confirm="true"
+                    document.querySelectorAll('a.nav-link, a[data-confirm="true"]').forEach(a => {
+                        // skip links that target same page anchors or javascript:void
+                        if (!a.href || a.getAttribute('href').startsWith('#') || a.getAttribute('href').startsWith('javascript:')) return;
+
+                        a.addEventListener('click', function (ev) {
+                            // if link points to current origin and is a different page, intercept
+                            const linkUrl = a.href;
+                            const samePage = (linkUrl.split('#')[0] === window.location.href.split('#')[0]);
+                            if (samePage) return; // allow anchors on same page
+                            ev.preventDefault();
+                            confirmAndNavigate(linkUrl);
+                        });
+                    });
+
+                    // Optional: expose a manual "Save draft" button for the user if desired.
+                    // Example usage (not added to UI by default):
+                    // window.saveQuizProgress = function() { saveProgress().then(()=>{ alert('Saved'); dirty=false; }); };
+
+
+
+                    /*
+        Pseudocode / Plan (detailed):
+        1. Add hidden inputs to the form to match the saveProgress payload:
+           - UserName
+           - QSetId
+           - QuestionCount
+           - QuestionLastId
+           - LastUpdated
+
+        2. Ensure hidden inputs have id attributes so JavaScript can update them before saving.
+
+        3. Update the client-side gather/save flow:
+           - gatherFormData():
+             - Create a FormData based on the form element.
+             - Update/ensure the following fields reflect current state just before sending:
+               - 'QuestionCount' = count of rendered question containers
+               - 'QuestionLastId' = value of the last UserAnswers[..].QuestionId input (or 0 if none)
+               - 'LastUpdated' = current ISO timestamp (new Date().toISOString())
+               - 'UserName' = value from hidden input (pre-filled server-side) or empty
+             - Return the updated FormData.
+
+           - saveProgress():
+             - Call gatherFormData() to get up-to-date FormData.
+             - Append 'SaveProgress' = 'true'
+             - POST via fetch() to form.action (or current URL) with credentials same-origin and appropriate header (X-Requested-With).
+             - Return the promise so caller can wait on success/failure.
+
+        4. Navigation protection:
+           - Keep dirty flag and beforeunload handler.
+           - On change of answer radios set dirty = true.
+           - On actual form submit (final Submit button) set dirty = false to avoid prompt.
+           - When user chooses to save on navigation, call saveProgress(), then if success navigate; on failure ask whether to leave anyway.
+
+        5. Small UX touches:
+           - Update the LastUpdated hidden field on each save attempt.
+           - Use ISO 8601 format for LastUpdated so server DateTime parsing works reliably.
+
+        6. Ensure generated form field names match the server-side model:
+           - Use exact names: UserName, QSetId, QuestionCount, QuestionLastId, LastUpdated
+        */
+
+
+
+                })();
+    </script>
+}
