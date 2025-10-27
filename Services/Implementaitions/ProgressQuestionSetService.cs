@@ -1,6 +1,7 @@
 ﻿using quizweb.Models;
 using quizweb.Repositories.Interfaces;
 using quizweb.Services.Interfaces;
+using quizweb.ViewModels;
 
 namespace quizweb.Services.Implementaitions
 {
@@ -13,9 +14,17 @@ namespace quizweb.Services.Implementaitions
             _progressQuestionSetRepository = progressQuestionSetRepository;
         }
 
-        public async Task AddProgressQuestionSet(ProgressQuestionSet progressQuestionSet)
+        public async Task AddProgressQuestionSet(ProgressQuestionSetViewModel viewModel, string username)
         {
-            await _progressQuestionSetRepository.AddProgressQuestionSet(progressQuestionSet);
+            var pQS = new ProgressQuestionSet
+            {
+                UserName = username,
+                QSetId = viewModel.QSetId,
+                QuestionCount = viewModel.QuestionCount,
+                QuestionLastId = viewModel.QuestionLastId,
+                LastUpdated = DateTime.UtcNow //tùy là new thì nó tự init những có problem nên phải explicit set.
+            };
+            await _progressQuestionSetRepository.AddProgressQuestionSet(pQS);
         }
 
         public async Task UpdateProgressQuestionSet(ProgressQuestionSet progressQuestionSet)

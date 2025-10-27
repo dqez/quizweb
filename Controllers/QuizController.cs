@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using quizweb.Models;
+using quizweb.Services.Implementaitions;
 using quizweb.Services.Interfaces;
+using quizweb.ViewModels;
 using quizweb.ViewModels.QuestionSet;
 using System.Text.Json;
 
@@ -14,13 +17,15 @@ namespace quizweb.Controllers
         private readonly IQuizService _quizService;
         private readonly ILevelService _levelService;
         private readonly ICategoryService _categoryService;
+        private readonly IProgressQuestionSetService _progressQuestionSetService;
 
-        public QuizController(ILogger<QuizController> logger, IQuizService quizService, ILevelService levelService, ICategoryService categoryService)
+        public QuizController(ILogger<QuizController> logger, IQuizService quizService, ILevelService levelService, ICategoryService categoryService, IProgressQuestionSetService progressQuestionSetService)
         {
             _logger = logger;
             _quizService = quizService;
             _levelService = levelService;
             _categoryService = categoryService;
+            _progressQuestionSetService = progressQuestionSetService;
         }
 
         public IActionResult Index()
@@ -129,6 +134,25 @@ namespace quizweb.Controllers
                 return View(viewModel);
             }
             return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SaveProgress(ProgressQuestionSetViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var username = User.Identity?.Name;
+            if (username == null)
+            {
+                return Unauthorized();
+            }
+
+            await _progressQuestionSetService.AddProgressQuestionSet(viewModel, username);
+
+            return NoContent();
         }
     }
 }
