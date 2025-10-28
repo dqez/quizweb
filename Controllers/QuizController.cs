@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using quizweb.Models;
-using quizweb.Services.Implementaitions;
 using quizweb.Services.Interfaces;
 using quizweb.ViewModels;
 using quizweb.ViewModels.QuestionSet;
@@ -88,9 +86,17 @@ namespace quizweb.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Play()
+        public async Task<IActionResult> Play(int? QSetId)
         {
-            var viewModel = await _quizService.GetRandomQuizAsync();
+            PlayQuestionSetViewModel viewModel;
+            if (QSetId.HasValue)
+            {
+                viewModel = await _quizService.GetQuizAsync(QSetId.Value);
+            }
+            else
+            {
+                viewModel = await _quizService.GetRandomQuizAsync();
+            }
             return View(viewModel);
         }
 
@@ -120,10 +126,10 @@ namespace quizweb.Controllers
                 {
                     _logger.LogError(ex, "Error submitting quiz");
                     ModelState.AddModelError("", "An error occurred while submitting the quiz.");
-                    return View(submitQuiz);
+                    return RedirectToAction("Play", new { qSetId = submitQuiz.QSetId });
                 }
             }
-            return View(submitQuiz);
+            return RedirectToAction("Play", new { qSetId = submitQuiz.QSetId });
         }
 
         public IActionResult Result()

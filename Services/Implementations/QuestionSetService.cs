@@ -2,7 +2,7 @@
 using quizweb.Repositories.Interfaces;
 using quizweb.Services.Interfaces;
 
-namespace quizweb.Services.Implementaitions
+namespace quizweb.Services.Implementations
 {
     public class QuestionSetService : IQuestionSetService
     {

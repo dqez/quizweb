@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using quizweb.Models;
-using quizweb.Services.Implementaitions;
 using quizweb.Services.Interfaces;
 using quizweb.ViewModels;
 
@@ -22,10 +20,10 @@ namespace quizweb.Controllers
         }
 
         // GET: Categories1Controller/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
+        //public ActionResult Details(int id)
+        //{
+        //    return View();
+        //}
 
         // GET: Categories1Controller/Create
         public IActionResult Create()
@@ -40,11 +38,12 @@ namespace quizweb.Controllers
         {
             if (ModelState.IsValid)
             {
-                try { 
-                    await _categoryService.AddCategoryAsync(cateCVM); 
+                try
+                {
+                    await _categoryService.AddCategoryAsync(cateCVM);
                     return RedirectToAction(nameof(Index));
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     ModelState.AddModelError("", "Failed to create category: " + ex.Message);
                 }
@@ -53,45 +52,45 @@ namespace quizweb.Controllers
         }
 
         // GET: Categories1Controller/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
+        //public ActionResult Edit(int id)
+        //{
+        //    return View();
+        //}
 
         // POST: Categories1Controller/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Edit(int id, IFormCollection collection)
+        //{
+        //    try
+        //    {
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    catch
+        //    {
+        //        return View();
+        //    }
+        //}
 
         // GET: Categories1Controller/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
+        //public ActionResult Delete(int id)
+        //{
+        //    return View();
+        //}
 
         // POST: Categories1Controller/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult DeleteConfirmed(int id)
+        //{
+        //    try
+        //    {
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    catch
+        //    {
+        //        return View();
+        //    }
+        //}
     }
 }

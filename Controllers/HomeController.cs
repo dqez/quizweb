@@ -1,9 +1,8 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using quizweb.Models;
-using quizweb.Services.Implementaitions;
 using quizweb.Services.Interfaces;
 using quizweb.ViewModels;
+using System.Diagnostics;
 
 namespace quizweb.Controllers
 {

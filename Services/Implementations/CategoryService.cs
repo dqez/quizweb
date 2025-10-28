@@ -1,10 +1,9 @@
 ﻿using quizweb.Models;
-using quizweb.Repositories.Implementations;
 using quizweb.Repositories.Interfaces;
 using quizweb.Services.Interfaces;
 using quizweb.ViewModels;
 
-namespace quizweb.Services.Implementaitions
+namespace quizweb.Services.Implementations
 {
     public class CategoryService : ICategoryService
     {

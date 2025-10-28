@@ -13,22 +13,22 @@
             <p><strong>Full Name:</strong> <span class="editable" data-field="FullName">@Model.Fullname</span></p>
             <p><strong>Email:</strong> <span class="editable" data-field="Email">@Model.Email</span></p>
             <p><strong>Birthday:</strong> <span class="editable" data-field="BirthDay">@Model.Birthday</span></p>
-            @Html.DropDownListFor(m => m.Sex, new List<SelectListItem> 
+            @Html.DropDownListFor(m => m.Sex, new List<SelectListItem>
             {
-            new SelectListItem {Text = "Male", Value = "True"},
-            new SelectListItem {Text = "Female", Value = "False"}
-            },
-                     new { @class = "form-control", onchange = "SelectChange(this)", data_field = "Sex" })
+                new SelectListItem { Text = "Male", Value = "True" },
+                        new SelectListItem { Text = "Female", Value = "False" }
+                        },
+                        new { @class = "form-control", onchange = "SelectChange(this)", data_field = "Sex" })
         </div>
     </div>
 </div>
 @Html.AntiForgeryToken()
 @section Scripts {
     <script>
-                document.addEventListener('DOMContentLoaded', function () {
-            const editables = document.querySelectorAll('.editable');
+        document.addEventListener('DOMContentLoaded', function () {
+            const editable = document.querySelectorAll('.editable');
 
-            editables.forEach(span => {
+            editable.forEach(span => {
                 span.addEventListener('click', function () {
                     if (this.querySelector('input')) return; // Đang edit rồi thì thôi
 

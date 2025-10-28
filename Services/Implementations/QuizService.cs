@@ -5,7 +5,7 @@ using quizweb.ViewModels.Answer;
 using quizweb.ViewModels.Question;
 using quizweb.ViewModels.QuestionSet;
 
-namespace quizweb.Services.Implementaitions
+namespace quizweb.Services.Implementations
 {
     public class QuizService : IQuizService
     {

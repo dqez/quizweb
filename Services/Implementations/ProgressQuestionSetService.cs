@@ -3,7 +3,7 @@ using quizweb.Repositories.Interfaces;
 using quizweb.Services.Interfaces;
 using quizweb.ViewModels;
 
-namespace quizweb.Services.Implementaitions
+namespace quizweb.Services.Implementations
 {
     public class ProgressQuestionSetService : IProgressQuestionSetService
     {

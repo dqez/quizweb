@@ -5,7 +5,7 @@ using quizweb.Models;
 using quizweb.Repositories.Interfaces;
 using quizweb.Repositories.Implementations;
 using quizweb.Services.Interfaces;
-using quizweb.Services.Implementaitions;
+using quizweb.Services.Implementations;
 
 var builder = WebApplication.CreateBuilder(args);
 
