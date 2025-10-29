@@ -15,7 +15,7 @@ namespace quizweb.Services.Implementations
 
         public async Task<List<MarkedQuestion>> GetAllMarkedQuestionsAsync(string username)
         {
-            return (await _markedQuestionRepository.GetAllMarkedQuestionsAsync(username)).ToList();
+            return await _markedQuestionRepository.GetAllMarkedQuestionsAsync(username);
         }
 
         public async Task AddMarkedQuestion(MarkedQuestion markedQuestion)

@@ -26,7 +26,7 @@ namespace quizweb.Repositories.Implementations
                 await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<ProgressQuestionSet>> GetAllProgressQuestionSets(string username)
+        public async Task<List<ProgressQuestionSet>> GetAllProgressQuestionSets(string username)
         {
             return await _context.ProgressQuestionSets.AsNoTracking().Where(pqs => pqs.UserName == username).ToListAsync();
         }

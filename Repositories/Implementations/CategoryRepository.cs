@@ -33,7 +33,7 @@ namespace quizweb.Repositories.Implementations
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Category>> GetAllCategoryAsync()
+        public async Task<List<Category>> GetAllCategoryAsync()
         {
             return await _context.Categories.AsNoTracking().ToListAsync();
         }

@@ -10,25 +10,21 @@ namespace quizweb.Repositories.Implementations
         private readonly AppDbContext _context;
         private IDbContextTransaction? _transaction;
 
-        private readonly IQuestionSetRepository _qsRepo;
-        private readonly IQuestionRepository _qRepo;
-        private readonly IAnswerRepository _aRepo;
-
         private bool _disposed;
 
         public EfUnitOfWork(AppDbContext context, IQuestionSetRepository qsRepo, IQuestionRepository qRepo, IAnswerRepository aRepo)
         {
             _context = context;
-            _qsRepo = qsRepo;
-            _qRepo = qRepo;
-            _aRepo = aRepo;
+            QuestionSetRepository = qsRepo;
+            QuestionRepository = qRepo;
+            AnswerRepository = aRepo;
         }
 
-        public IQuestionSetRepository QuestionSetRepository => _qsRepo;
+        public IQuestionSetRepository QuestionSetRepository { get; }
 
-        public IQuestionRepository QuestionRepository => _qRepo;
+        public IQuestionRepository QuestionRepository { get; }
 
-        public IAnswerRepository AnswerRepository => _aRepo;
+        public IAnswerRepository AnswerRepository { get; }
 
 
         public async Task BeginTransactionAsync()

@@ -24,7 +24,7 @@ namespace quizweb.Repositories.Implementations
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Ranking>> GetTopRankingsAsync(int topN)
+        public async Task<List<Ranking>> GetTopRankingsAsync(int topN)
         {
             return await _context.Rankings.AsNoTracking().OrderByDescending(r => r.TotalScore).Take(topN).ToListAsync();
         }

@@ -17,11 +17,7 @@ namespace quizweb.Services.Implementations
         {
              
             var q = await _questionRepository.GetQuestionByIdAsync(id);
-            if (q == null)
-            {
-                throw new Exception("Question not found");
-            }
-            return q;
+            return q ?? throw new Exception("Question not found");
         }
     }
 }

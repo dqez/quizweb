@@ -33,34 +33,67 @@ namespace quizweb.Services.Implementations
                     AuthorName = authorName,
                     LevelId = viewModel.LevelId,
                     CategoryId = viewModel.CategoryId,
-                    CreatedTime = DateTime.Now,
+                    CreatedTime = DateTime.UtcNow,
                 };
                 await _unitOfWork.QuestionSetRepository.AddQuestionSetAsync(qs);
                 await _unitOfWork.SaveChangesAsync();
 
-                foreach (var q in viewModel.Questions)
+                //old approach:
+
+                //foreach (var q in viewModel.Questions)
+                //{
+                //    var question = new Question
+                //    {
+                //        QuestionText = q.QuestionText,
+                //        QSetId = qs.QSetId,
+                //    };
+                //    await _unitOfWork.QuestionRepository.AddQuestionAsync(question);
+                //    await _unitOfWork.SaveChangesAsync();
+
+                //    foreach (var a in q.Answers)
+                //    {
+                //        var answer = new Answer
+                //        {
+                //            QuestionId = question.QuestionId,
+                //            AnswerText = a.AnswerText,
+                //            IsCorrect = a.IsCorrect,
+
+                //        };
+                //        await _unitOfWork.AnswerRepository.AddAnswerAsync(answer);
+                //    }
+
+                //}
+
+
+                //new approach:
+
+                var questionsList = viewModel.Questions.Select(q => new Question
                 {
-                    var question = new Question
+                    QuestionText = q.QuestionText,
+                    QSetId = qs.QSetId
+                }).ToList();
+
+                await _unitOfWork.QuestionRepository.AddQuestionsAsync(questionsList);
+                await _unitOfWork.SaveChangesAsync();
+
+                var allAnswers = new List<Answer>();
+
+                for (var i = 0; i < viewModel.Questions.Count; i++)
+                {
+                    var idQuestionCreated = questionsList[i].QuestionId;
+
+                    var answers = viewModel.Questions[i].Answers.Select(a => new Answer()
                     {
-                        QuestionText = q.QuestionText,
-                        QSetId = qs.QSetId,
-                    };
-                    await _unitOfWork.QuestionRepository.AddQuestionAsync(question);
-                    await _unitOfWork.SaveChangesAsync();
+                        AnswerText = a.AnswerText,
+                        IsCorrect = a.IsCorrect,
+                        QuestionId = idQuestionCreated
+                    }).ToList();
 
-                    foreach (var a in q.Answers)
-                    {
-                        var answer = new Answer
-                        {
-                            QuestionId = question.QuestionId,
-                            AnswerText = a.AnswerText,
-                            IsCorrect = a.IsCorrect,
-
-                        };
-                        await _unitOfWork.AnswerRepository.AddAnswerAsync(answer);
-                    }
-
+                    allAnswers.AddRange(answers);
                 }
+
+                await _unitOfWork.AnswerRepository.AddAnswersAsync(allAnswers);
+
                 await _unitOfWork.SaveChangesAsync();
                 await _unitOfWork.CommitAsync();
 
@@ -80,16 +113,10 @@ namespace quizweb.Services.Implementations
             try
             {
                 var answers = await _unitOfWork.AnswerRepository.GetAllAnswersByQSetIdAsync(idQset);
-                if (answers != null)
-                {
-                    _unitOfWork.AnswerRepository.DeleteAnswersAsync(answers);
-                }
+                _unitOfWork.AnswerRepository.DeleteAnswersAsync(answers);
 
                 var questions = await _unitOfWork.QuestionRepository.GetAllQuestionsByIdQSetAsync(idQset);
-                if (questions != null)
-                {
-                    _unitOfWork.QuestionRepository.DeleteQuestionsAsync(questions);
-                }
+                _unitOfWork.QuestionRepository.DeleteQuestionsAsync(questions);
 
                 var questionSet = await _unitOfWork.QuestionSetRepository.GetQuestionSetByIdAsync(idQset);
                 if (questionSet != null)

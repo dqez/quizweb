@@ -10,6 +10,6 @@ namespace quizweb.Services.Interfaces
         Task AddAnsweredQuestions(List<AnsweredQuestion> answeredQuestions);
         Task AddAnsweredQuestion(AnsweredQuestion answeredQuestion);
         Task UpdateAnsweredQuestion(AnsweredQuestion answeredQuestion);
-        Task RemoveAnsweredQuestion(int AqId);
+        Task RemoveAnsweredQuestion(int aqId);
     }
 }

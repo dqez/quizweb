@@ -16,26 +16,20 @@ namespace quizweb.Services.Implementations
         public async Task<QuestionSet> GetQuestionSetRandomByIdCateAndIdLevel(int idCate, int idLevel)
         {
             var qs = await _questionSetRepository.GetQuestionSetRandomByIdCateAndIdLevel(idCate, idLevel);
-            if (qs == null)
-            {
-                throw new Exception("QuestionSetRandom is not found");
-            }
-            return qs;
+
+            return qs ?? throw new Exception("QuestionSetRandom is not found"); ;
         }
 
         public async Task<List<QuestionSet>> GetAllCreatedQuestionSetsAsync(string username)
         {
-            return (await _questionSetRepository.GetAllCreatedQuestionSetsByUsernameAsync(username)).ToList();
+            return await _questionSetRepository.GetAllCreatedQuestionSetsByUsernameAsync(username);
         }
 
         public async Task<QuestionSet> GetQuestionSetByIdAsync(int id)
         {
             var qs = await _questionSetRepository.GetQuestionSetByIdAsync(id);
-            if (qs == null)
-            {
-                throw new Exception("QuestionSetRandom is not found");
-            }
-            return qs;
+            
+            return qs ?? throw new Exception("QuestionSetRandom is not found");
         }
     }
 }

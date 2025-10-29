@@ -14,6 +14,11 @@ namespace quizweb.Repositories.Implementations
             _context = context;
         }
 
+        public async Task AddAnswersAsync(List<Answer> answers)
+        {
+            await _context.Answers.AddRangeAsync(answers);
+        }
+
         public async Task AddAnswerAsync(Answer answer)
         {
             await _context.Answers.AddAsync(answer);
@@ -25,17 +30,17 @@ namespace quizweb.Repositories.Implementations
             _context.Answers.Remove(answer);
         }
 
-        public void DeleteAnswersAsync(IEnumerable<Answer> answers)
+        public void DeleteAnswersAsync(List<Answer> answers)
         {
             _context.Answers.RemoveRange(answers);
         }
 
-        public async Task<IEnumerable<Answer>> GetAllAnswersByIdQuestionAsync(int idQuestion)
+        public async Task<List<Answer>> GetAllAnswersByIdQuestionAsync(int idQuestion)
         {
             return await _context.Answers.AsNoTracking().Where(a => a.QuestionId == idQuestion).ToListAsync();
         }
 
-        public async Task<IEnumerable<Answer>> GetAllAnswersByQSetIdAsync(int idQset)
+        public async Task<List<Answer>> GetAllAnswersByQSetIdAsync(int idQset)
         {
             return await _context.Answers.AsNoTracking().Where(a => a.Question.QSetId == idQset).ToListAsync();
         }

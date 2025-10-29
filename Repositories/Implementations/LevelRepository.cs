@@ -32,7 +32,7 @@ namespace quizweb.Repositories.Implementations
                 await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Level>> GetAllLevelsAsync()
+        public async Task<List<Level>> GetAllLevelsAsync()
         {
             return await _context.Levels.AsNoTracking().ToListAsync();
         }

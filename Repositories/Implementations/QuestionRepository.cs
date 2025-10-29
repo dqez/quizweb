@@ -15,6 +15,11 @@ namespace quizweb.Repositories.Implementations
             _context = context;
         }
 
+        public async Task AddQuestionsAsync(List<Question> questions)
+        {
+            await _context.Questions.AddRangeAsync(questions);
+        }
+
         public async Task AddQuestionAsync(Question question)
         {
             await _context.Questions.AddAsync(question);
@@ -25,12 +30,12 @@ namespace quizweb.Repositories.Implementations
             _context.Questions.Remove(question);
         }
 
-        public void DeleteQuestionsAsync(IEnumerable<Question> questions)
+        public void DeleteQuestionsAsync(List<Question> questions)
         {
             _context.Questions.RemoveRange(questions);
         }
 
-        public async Task<IEnumerable<Question>> GetAllQuestionsByIdQSetAsync(int idQSet)
+        public async Task<List<Question>> GetAllQuestionsByIdQSetAsync(int idQSet)
         {
             return await _context.Questions.AsNoTracking().Where(q => q.QSetId == idQSet).ToListAsync();
         }

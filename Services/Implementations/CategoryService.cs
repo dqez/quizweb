@@ -42,7 +42,7 @@ namespace quizweb.Services.Implementations
 
         public async Task<List<Category>> GetAllCategoryAsync()
         {
-            return (await _categoryRepository.GetAllCategoryAsync()).ToList();
+            return await _categoryRepository.GetAllCategoryAsync();
         }
 
         public async Task<Category> GetCategoryByIdAsync(int categoryId)

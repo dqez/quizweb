@@ -8,8 +8,8 @@ namespace quizweb.Repositories.Interfaces
         Task<QuestionSet?> GetQuestionSetByIdAsync(int id);
         Task<QuestionSet?> GetQuestionSetRandomByNewGuidAsync();
         Task<QuestionSet?> GetQuestionSetRandomByIdCateAndIdLevel(int idCate, int idLevel);
-        Task<IEnumerable<CorrectAnswerDTO>> GetCorrectAnswerSetByIdAsync(int id);
-        Task<IEnumerable<QuestionSet>> GetAllCreatedQuestionSetsByUsernameAsync(string username);
+        Task<List<CorrectAnswerDTO>> GetCorrectAnswerSetByIdAsync(int id);
+        Task<List<QuestionSet>> GetAllCreatedQuestionSetsByUsernameAsync(string username);
         Task AddQuestionSetAsync(QuestionSet questionSet);
         void UpdateQuestionSetAsync(QuestionSet questionSet);
         void DeleteQuestionSetAsync(QuestionSet questionSet);

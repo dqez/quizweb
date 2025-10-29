@@ -16,19 +16,19 @@ namespace quizweb.Repositories.Implementations
             _context = context;
         }
 
-        public async Task<IEnumerable<QuestionSet>> GetCreatedQuestionSetsAsync(string username)
+        public async Task<List<QuestionSet>> GetCreatedQuestionSetsAsync(string username)
 
         {
             return await _context.QuestionSets.AsNoTracking().Where(qs => qs.AuthorName == username).ToListAsync();
         }
 
-        public async Task<IEnumerable<MarkedQuestion>> GetMarkedQuestionAsync(string username)
+        public async Task<List<MarkedQuestion>> GetMarkedQuestionAsync(string username)
 
         {
             return await _context.MarkedQuestions.AsNoTracking().Where(mq => mq.UserName == username).ToListAsync();
         }
 
-        public async Task<IEnumerable<ProgressQuestionSet>> GetProgressQuestionSetsAsync(string username)
+        public async Task<List<ProgressQuestionSet>> GetProgressQuestionSetsAsync(string username)
 
         {
             return await _context.ProgressQuestionSets.AsNoTracking().Where(pqs => pqs.UserName == username).ToListAsync();

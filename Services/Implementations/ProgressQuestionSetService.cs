@@ -43,7 +43,7 @@ namespace quizweb.Services.Implementations
 
         public async Task<List<ProgressQuestionSet>> GetAllProgressQuestionSets(string username)
         {
-            return (await _progressQuestionSetRepository.GetAllProgressQuestionSets(username)).ToList();
+            return await _progressQuestionSetRepository.GetAllProgressQuestionSets(username);
         }
 
         public async Task<ProgressQuestionSet> GetProgressQuestionSetById(int id)

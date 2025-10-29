@@ -20,7 +20,7 @@ namespace quizweb.Repositories.Implementations
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<MarkedQuestion>> GetAllMarkedQuestionsAsync(string username)
+        public async Task<List<MarkedQuestion>> GetAllMarkedQuestionsAsync(string username)
         {
             return await _context.MarkedQuestions.AsNoTracking().Where(mq => mq.UserName == username).ToListAsync();
         }

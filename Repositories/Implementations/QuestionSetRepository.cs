@@ -27,7 +27,7 @@ namespace quizweb.Repositories.Implementations
                 //await _context.SaveChangesAsync(); disable because using UoW
         }
 
-        public async Task<IEnumerable<QuestionSet>> GetAllCreatedQuestionSetsByUsernameAsync(string username)
+        public async Task<List<QuestionSet>> GetAllCreatedQuestionSetsByUsernameAsync(string username)
         {
             return await _context.QuestionSets.AsNoTracking().Where(qs => qs.AuthorName == username).ToListAsync();
         }
@@ -77,7 +77,7 @@ namespace quizweb.Repositories.Implementations
             //await _context.SaveChangesAsync(); disable because using UoW
         }
 
-        public async Task<IEnumerable<CorrectAnswerDTO>>GetCorrectAnswerSetByIdAsync(int id)
+        public async Task<List<CorrectAnswerDTO>>GetCorrectAnswerSetByIdAsync(int id)
         {
             return await _context.Questions
                 .AsNoTracking()

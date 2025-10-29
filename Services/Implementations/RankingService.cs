@@ -29,17 +29,14 @@ namespace quizweb.Services.Implementations
 
         public async Task<List<Ranking>> GetTopRankingsAsync(int topN)
         {
-            return (await _rankingRepository.GetTopRankingsAsync(topN)).ToList();
+            return await _rankingRepository.GetTopRankingsAsync(topN);
         }
 
         public async Task<Ranking> GetUserRankingAsync(string username)
         {
             var ranking = await _rankingRepository.GetUserRankingAsync(username);
-            if (ranking == null)
-            {
-                throw new Exception("UserRanking is not found");
-            }
-            return ranking;
+            
+            return ranking ?? throw new Exception("UserRanking is not found");
         }
 
         public async Task UpdateUserScoreAsync(string username, int score)
