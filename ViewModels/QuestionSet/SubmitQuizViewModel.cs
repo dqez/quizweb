@@ -14,16 +14,14 @@ namespace quizweb.ViewModels.QuestionSet
         [Required(ErrorMessage = "User answers are required")]
         [MinLength(1, ErrorMessage = "At least one answer is required")]
         public List<UserAnswerViewModel> UserAnswers { get; set; } = [];
-    }
 
-    public class UserAnswerViewModel
-    {
-        [Required(ErrorMessage = "Question ID is required")]
-        [Range(1, int.MaxValue, ErrorMessage = "Invalid Question ID")]
-        public int QuestionId { get; set; }
+        [Required(ErrorMessage = "Question Count is required")]
+        [Range(1, int.MaxValue, ErrorMessage = "Invalid Question Count")]
+        public int QuestionCount { get; set; }
 
-        [Required(ErrorMessage = "Answer selection is required")]
-        [Range(1, int.MaxValue, ErrorMessage = "Invalid Answer ID")]
-        public int SelectedAnswerId { get; set; }
+        [Required(ErrorMessage = "Question Last Id is required")]
+        [Range(1, int.MaxValue, ErrorMessage = "Invalid Question Last ID")]
+        public int QuestionLastId { get; set; }
+
     }
 }

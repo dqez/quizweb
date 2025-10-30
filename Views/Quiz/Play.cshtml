@@ -13,6 +13,8 @@
 
     <input type="hidden" name="QSetId" value="@Model.QSetId" />
     <input type="hidden" name="QSetName" value="@Model.QSetName" />
+    <input type="hidden" id="QuestionCount" name="QuestionCount" value=0/>
+    <input type="hidden" id="QuestionLastId" name="QuestionLastId" value=0/>
 
     @for (int i = 0; i < Model.Questions.Count; i++)
     {
@@ -51,62 +53,91 @@
 @section Scripts {
     <script>
 
-        (function () {
+        (function() {
             const form = document.getElementById('quizForm');
             const saveUrl = form.dataset.saveUrl; // SaveProgress endpoint
             let dirty = false;
 
+            const questionLastId = document.getElementById('QuestionLastId');
+            const questionCount = document.getElementById('QuestionCount');
+
+
+            function updateLastAnsweredQuestion() {
+                questionLastId.value = getLastAnsweredQuestionId();
+                questionCount.value = getAnsweredQuestionCount();
+            }
+
+
             // 1) Mark dirty when any answer selected
             document.querySelectorAll('.answer-radio').forEach(radio => {
-                radio.addEventListener('change', (ev) => {
-                    dirty = true;
+                radio.addEventListener('change',
+                    (ev) => {
+                        dirty = true;
 
-                    document.querySelectorAll('.last-question').forEach(e => {
-                        e.classList.remove('last-question');
+                        document.querySelectorAll('.last-question').forEach(e => {
+                            e.classList.remove('last-question');
+                        });
+
+                        const questionContainer = ev.target.closest('.question-container');
+                        if (questionContainer) {
+                            questionContainer.classList.add('last-question');
+                            questionContainer.classList.add('answered');
+                        }
                     });
-
-                    const questionContainer = ev.target.closest('.question-container');
-                    if (questionContainer) {
-                        questionContainer.classList.add('last-question');
-                        questionContainer.classList.add('answered');
-                    }
-                });
             });
 
-            function getAnsweredQuestionCount(){
+            function getAnsweredQuestionCount() {
                 return document.querySelectorAll('.question-container.answered').length;
             }
 
-            function getLastAnsweredQuestionId(){
+            function getLastAnsweredQuestionId() {
                 const lastQuestionDiv = document.querySelector('.last-question');
                 return lastQuestionDiv ? lastQuestionDiv.dataset.questionId : '0';
             }
 
             // 2) On standard submit, clear dirty (server will handle final submission)
-            form.addEventListener('submit', () => {
-                dirty = false;
-                // allow normal submit
-            });
+            form.addEventListener('submit',
+                () => {
+                    dirty = false;
+                    updateLastAnsweredQuestion();
+                    // allow normal submit
+                });
 
             // 3) beforeunload native prompt
-            this.window.addEventListener('beforeunload', function (e) {
-                if (!dirty) return;
-                // Standard message not customizable in modern browsers
-                const confirmationMessage = 'You have unsaved progress. Do you really want to leave?';
-                (e || this.window.event).returnValue = confirmationMessage;
-                return confirmationMessage;
-            });
+            this.window.addEventListener('beforeunload',
+                function(e) {
+                    if (!dirty) return;
+                    // Standard message not customizable in modern browsers
+                    const confirmationMessage = 'You have unsaved progress. Do you really want to leave?';
+                    (e || this.window.event).returnValue = confirmationMessage;
+                    return confirmationMessage;
+                });
 
             // Helper: gather current form data into FormData
             function gatherFormData() {
-                const fd = new FormData(form);
+                const fd = new FormData();
 
-                fd.set('QSetId', '@Model.QSetId');
                 fd.set('QSetId', '@Model.QSetId');
                 fd.set('QuestionCount', getAnsweredQuestionCount().toString());
 
                 const lastQuestionId = getLastAnsweredQuestionId();
                 fd.set('QuestionLastId', lastQuestionId === '0' ? '0' : lastQuestionId);
+
+                const questionContainers = document.querySelectorAll('.question-container');
+                let answerIndex = 0;
+
+                questionContainers.forEach(container => {
+                    const questionId = container.dataset.questionId;
+                    const selectedRadio = container.querySelector('.answer-radio:checked');
+
+                    if (selectedRadio) {
+                        fd.append(`UserAnswers[${answerIndex}].QuestionId`, questionId);
+                        fd.append(`UserAnswers[${answerIndex}].SelectedAnswerId`, selectedRadio.value);
+                    }
+                    answerIndex++;
+
+                });
+
 
                 const tokenInput = form.querySelector('input[name="__RequestVerificationToken"]');
                 if (tokenInput && !fd.has('__RequestVerificationToken')) {
@@ -121,14 +152,15 @@
             function saveProgress() {
                 const fd = gatherFormData();
 
-                return fetch(saveUrl, {
-                    method: 'POST',
-                    body: fd,
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest' // indicates AJAX
-                    },
-                    credentials: 'same-origin'
-                }).then(response => {
+                return fetch(saveUrl,
+                    {
+                        method: 'POST',
+                        body: fd,
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest' // indicates AJAX
+                        },
+                        credentials: 'same-origin'
+                    }).then(response => {
                     if (!response.ok) throw new Error('Save failed: ' + response.status);
                     return response;
                 });
@@ -172,14 +204,15 @@
                 // skip links that target same page anchors or javascript:void
                 if (!a.href || a.getAttribute('href').startsWith('#') || a.getAttribute('href').startsWith('javascript:')) return;
 
-                a.addEventListener('click', function (ev) {
-                    // if link points to current origin and is a different page, intercept
-                    const linkUrl = a.href;
-                    const samePage = (linkUrl.split('#')[0] === window.location.href.split('#')[0]);
-                    if (samePage) return; // allow anchors on same page
-                    ev.preventDefault();
-                    confirmAndNavigate(linkUrl);
-                });
+                a.addEventListener('click',
+                    function(ev) {
+                        // if link points to current origin and is a different page, intercept
+                        const linkUrl = a.href;
+                        const samePage = (linkUrl.split('#')[0] === window.location.href.split('#')[0]);
+                        if (samePage) return; // allow anchors on same page
+                        ev.preventDefault();
+                        confirmAndNavigate(linkUrl);
+                    });
             });
         })();
     </script>

@@ -1,6 +1,7 @@
 ﻿using quizweb.Models;
 using quizweb.Repositories.Interfaces;
 using quizweb.Services.Interfaces;
+using quizweb.ViewModels;
 using quizweb.ViewModels.Answer;
 using quizweb.ViewModels.Question;
 using quizweb.ViewModels.QuestionSet;
@@ -12,12 +13,14 @@ namespace quizweb.Services.Implementations
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRankingService _rankingService;
         private readonly IAnsweredQuestionService _answeredQuestionService;
+        private readonly IProgressQuestionSetService _progressQuestionSetService;
 
-        public QuizService(IUnitOfWork unitOfWork, IRankingService rankingService, IAnsweredQuestionService answeredQuestionService)
+        public QuizService(IUnitOfWork unitOfWork, IRankingService rankingService, IAnsweredQuestionService answeredQuestionService, IProgressQuestionSetService progressQuestionSetService)
         {
             _unitOfWork = unitOfWork;
             _rankingService = rankingService;
             _answeredQuestionService = answeredQuestionService;
+            _progressQuestionSetService = progressQuestionSetService;
         }
 
         public async Task CreateQuizAsync(CreateQuestionSetViewModel viewModel, string authorName)
@@ -197,6 +200,11 @@ namespace quizweb.Services.Implementations
             return viewModel;
         }
 
+        public Task<SaveProgressViewModel> SaveProgressAsync(SaveProgressViewModel progressViewModel, string username)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<QuizResultViewModel> SubmitQuizAsync(SubmitQuizViewModel submitModel, string username)
         {
 
@@ -224,6 +232,12 @@ namespace quizweb.Services.Implementations
             int score = 0;
             var questionsResult = new List<QuestionResultViewModel>(submitModel.UserAnswers.Count);
             var answeredQuestions = new List<AnsweredQuestion>(submitModel.UserAnswers.Count);
+            var progQuesSet = new ProgressQuestionSetViewModel
+            {
+                QSetId = submitModel.QSetId,
+                QuestionCount = submitModel.QuestionCount,
+                QuestionLastId = submitModel.QuestionLastId
+            };
 
             foreach (var question in submitModel.UserAnswers)
             {
@@ -259,7 +273,8 @@ namespace quizweb.Services.Implementations
                     SelectedAnswerId = question.SelectedAnswerId
                 });
             }
-            
+
+            await _progressQuestionSetService.AddProgressQuestionSet(progQuesSet, username);
             await _answeredQuestionService.AddAnsweredQuestions(answeredQuestions);
             await _rankingService.UpdateUserScoreAsync(username, score);
 
