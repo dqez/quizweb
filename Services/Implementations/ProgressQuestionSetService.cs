@@ -16,25 +16,19 @@ namespace quizweb.Services.Implementations
 
         public async Task AddProgressQuestionSet(ProgressQuestionSetViewModel viewModel, string username)
         {
-            var pQS = new ProgressQuestionSet
-            {
-                UserName = username,
-                QSetId = viewModel.QSetId,
-                QuestionCount = viewModel.QuestionCount,
-                QuestionLastId = viewModel.QuestionLastId,
-                LastUpdated = DateTime.UtcNow //tùy là new thì nó tự init những có problem nên phải explicit set.
-            };
-            await _progressQuestionSetRepository.AddProgressQuestionSet(pQS);
+            var pQs = MapToProgressQuestionSet(viewModel, username);
+            await _progressQuestionSetRepository.AddProgressQuestionSet(pQs);
         }
 
-        public async Task UpdateProgressQuestionSet(ProgressQuestionSet progressQuestionSet)
+        public async Task UpdateProgressQuestionSet(ProgressQuestionSetViewModel viewModel, string username)
         {
-            await _progressQuestionSetRepository.UpdateProgressQuestionSet(progressQuestionSet);
+            var pQs = MapToProgressQuestionSet(viewModel, username);
+            await _progressQuestionSetRepository.UpdateProgressQuestionSet(pQs);
         }
 
-        public async Task DeleteProgressQuestionSet(int id)
+        public async Task DeleteProgressQuestionSet(string username, int QSetId)
         {
-            var pqs = await _progressQuestionSetRepository.GetProgressQuestionSetById(id);
+            var pqs = await _progressQuestionSetRepository.GetProgressQuestionSetByUsernameAndQSetId(username, QSetId);
             if (pqs != null)
             {
                 await _progressQuestionSetRepository.DeleteProgressQuestionSet(pqs);
@@ -46,15 +40,27 @@ namespace quizweb.Services.Implementations
             return await _progressQuestionSetRepository.GetAllProgressQuestionSets(username);
         }
 
-        public async Task<ProgressQuestionSet> GetProgressQuestionSetById(int id)
+        public async Task<ProgressQuestionSet?> GetProgressQuestionSetByUsernameAndQSetId(string username, int QSetId)
         {
-            var pqs = await _progressQuestionSetRepository.GetProgressQuestionSetById(id);
+            var pqs = await _progressQuestionSetRepository.GetProgressQuestionSetByUsernameAndQSetId(username, QSetId);
             if (pqs == null)
             {
                 throw new Exception("ProgressQuestionSet not found");
             }
             return pqs;
-
         }
+        
+        private ProgressQuestionSet MapToProgressQuestionSet(ProgressQuestionSetViewModel viewModel, string username)
+        {
+            return new ProgressQuestionSet()
+            {
+                UserName = username,
+                QSetId = viewModel.QSetId,
+                QuestionCount = viewModel.QuestionCount,
+                QuestionLastId = viewModel.QuestionLastId,
+                LastUpdated = DateTime.UtcNow //tùy là new thì nó tự init những có problem nên phải explicit set.
+            };
+        }
+
     }
 }

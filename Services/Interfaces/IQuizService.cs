@@ -11,7 +11,7 @@ namespace quizweb.Services.Interfaces
 
         Task<PlayQuestionSetViewModel> GetQuizAsync(int id);
         Task<QuizResultViewModel> SubmitQuizAsync(SubmitQuizViewModel submitModel, string username);
-        Task<SaveProgressViewModel> SaveProgressAsync(SaveProgressViewModel progressViewModel, string username);
+        Task SaveProgressAsync(SaveProgressViewModel saveModel, string username);
         Task<PlayQuestionSetViewModel> GetRandomQuizAsync();
     }
 }

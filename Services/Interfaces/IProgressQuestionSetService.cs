@@ -5,11 +5,12 @@ namespace quizweb.Services.Interfaces
 {
     public interface IProgressQuestionSetService
     {
-        public Task AddProgressQuestionSet(ProgressQuestionSetViewModel viewModel, string username);
-        public Task UpdateProgressQuestionSet(ProgressQuestionSet progressQuestionSet);
-        public Task DeleteProgressQuestionSet(int id);
-        public Task<List<ProgressQuestionSet>> GetAllProgressQuestionSets(string username);
-        public Task<ProgressQuestionSet> GetProgressQuestionSetById(int id);
+        Task AddProgressQuestionSet(ProgressQuestionSetViewModel viewModel, string username);
+        Task UpdateProgressQuestionSet(ProgressQuestionSetViewModel viewModel, string username);
+        Task DeleteProgressQuestionSet(string username, int QSetId);
+        Task<List<ProgressQuestionSet>> GetAllProgressQuestionSets(string username);
+        Task<ProgressQuestionSet?> GetProgressQuestionSetByUsernameAndQSetId(string username, int QSetId);
+
 
     }
 }

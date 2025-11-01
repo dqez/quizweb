@@ -200,9 +200,36 @@ namespace quizweb.Services.Implementations
             return viewModel;
         }
 
-        public Task<SaveProgressViewModel> SaveProgressAsync(SaveProgressViewModel progressViewModel, string username)
+        public async Task SaveProgressAsync(SaveProgressViewModel saveModel, string username)
         {
-            throw new NotImplementedException();
+            var progressQuestionSet = new ProgressQuestionSetViewModel
+            {
+                QSetId = saveModel.QSetId,
+                QuestionCount = saveModel.QuestionCount,
+                QuestionLastId = saveModel.QuestionLastId
+            };
+            
+            var answeredQuestions = saveModel.UserAnswers.Select(ua => new AnsweredQuestion()
+            {
+                QSetId = saveModel.QSetId,
+                UserName = username,
+                QuestionId = ua.QuestionId,
+                SelectedAnswerId = ua.SelectedAnswerId
+            }).ToList();
+
+            var progressQuestionSetExist = await _progressQuestionSetService.GetProgressQuestionSetByUsernameAndQSetId(username, saveModel.QSetId);
+            if (progressQuestionSetExist != null)
+            {
+                await _progressQuestionSetService.UpdateProgressQuestionSet(progressQuestionSet, username);
+            }
+            else
+            {
+                await _progressQuestionSetService.AddProgressQuestionSet(progressQuestionSet, username);
+            }
+
+            //Task: get the answered question from db, then compare and check, and finally just get the new answer right now.
+
+            await _answeredQuestionService.AddAnsweredQuestions(answeredQuestions);
         }
 
         public async Task<QuizResultViewModel> SubmitQuizAsync(SubmitQuizViewModel submitModel, string username)

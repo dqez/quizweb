@@ -16,17 +16,13 @@ namespace quizweb.Controllers
         private readonly IQuizService _quizService;
         private readonly ILevelService _levelService;
         private readonly ICategoryService _categoryService;
-        private readonly IProgressQuestionSetService _progressQuestionSetService;
-        private readonly IAnsweredQuestionService _answeredQuestionService;
 
-        public QuizController(ILogger<QuizController> logger, IQuizService quizService, ILevelService levelService, ICategoryService categoryService, IProgressQuestionSetService progressQuestionSetService, IAnsweredQuestionService answeredQuestionService)
+        public QuizController(ILogger<QuizController> logger, IQuizService quizService, ILevelService levelService, ICategoryService categoryService)
         {
             _logger = logger;
             _quizService = quizService;
             _levelService = levelService;
             _categoryService = categoryService;
-            _progressQuestionSetService = progressQuestionSetService;
-            _answeredQuestionService = answeredQuestionService;
         }
 
         public IActionResult Index()
@@ -159,7 +155,7 @@ namespace quizweb.Controllers
                 return Unauthorized();
             }
 
-            await _progressQuestionSetService.AddProgressQuestionSet(viewModel, username);
+            await _quizService.SaveProgressAsync(viewModel, username);
 
             return NoContent();
         }
