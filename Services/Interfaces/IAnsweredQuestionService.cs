@@ -1,10 +1,11 @@
-﻿using quizweb.Models;
+﻿using quizweb.DTOs;
+using quizweb.Models;
 
 namespace quizweb.Services.Interfaces
 {
     public interface IAnsweredQuestionService
     {
-        Task<List<AnsweredQuestion>> GetAllAnsweredQuestions(string username, int Qsetid);
+        Task<List<AnsweredQuestionDTO>> GetAllAnsweredQuestions(string username, int Qsetid);
         Task<AnsweredQuestion?> GetAnsweredQuestionById(int qId);
 
         Task AddAnsweredQuestions(List<AnsweredQuestion> answeredQuestions);

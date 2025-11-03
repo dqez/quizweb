@@ -227,8 +227,10 @@ namespace quizweb.Services.Implementations
                 await _progressQuestionSetService.AddProgressQuestionSet(progressQuestionSet, username);
             }
 
-            //Task: get the answered question from db, then compare and check, and finally just get the new answer right now.
+            var answeredQuestionList = await _answeredQuestionService.GetAllAnsweredQuestions(username, saveModel.QSetId);
 
+            //Task: get the answered question from db, then compare and check, and finally just get the new answer right now.
+            
             await _answeredQuestionService.AddAnsweredQuestions(answeredQuestions);
         }
 

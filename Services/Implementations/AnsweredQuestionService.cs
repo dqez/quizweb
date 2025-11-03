@@ -1,4 +1,5 @@
-﻿using quizweb.Models;
+﻿using quizweb.DTOs;
+using quizweb.Models;
 using quizweb.Repositories.Interfaces;
 using quizweb.Services.Interfaces;
 
@@ -23,9 +24,15 @@ namespace quizweb.Services.Implementations
             await _answeredQuestion.AddAnsweredQuestionsAsync(answeredQuestions);
         }
 
-        public async Task<List<AnsweredQuestion>> GetAllAnsweredQuestions(string username, int Qsetid)
+        public async Task<List<AnsweredQuestionDTO>> GetAllAnsweredQuestions(string username, int QSetId)
         {
-            return await _answeredQuestion.GetAllAnsweredQuestions(username, Qsetid);
+            var answeredQuestions = await _answeredQuestion.GetAllAnsweredQuestions(username, QSetId);
+
+            return answeredQuestions.Select(aQ => new AnsweredQuestionDTO()
+            {
+                QuestionId = aQ.QuestionId,
+                SelectedAnswerId = aQ.SelectedAnswerId
+            }).ToList();
         }
 
         public Task<AnsweredQuestion?> GetAnsweredQuestionById(int qId)
