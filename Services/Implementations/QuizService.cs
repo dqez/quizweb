@@ -221,49 +221,7 @@ namespace quizweb.Services.Implementations
                 await _progressQuestionSetService.AddProgressQuestionSet(progressQuestionSet, username);
             }
 
-            var answeredQuestionList = await _answeredQuestionService.GetAllAnsweredQuestions(username, saveModel.QSetId);
-
-            var answerQuestionDict = answeredQuestionList.ToDictionary(aq => aq.QuestionId, aq => aq);
-            
-            var questionToAdd = new List<AnsweredQuestion>();
-            var questionToUpdate = new List<AnsweredQuestion>();
-
-            foreach (var ua in saveModel.UserAnswers)
-            {
-                if (answerQuestionDict.TryGetValue(ua.QuestionId, out var existingAnswer))
-                {
-                    if (existingAnswer.SelectedAnswerId != ua.SelectedAnswerId)
-                    {
-                        questionToUpdate.Add(new AnsweredQuestion()
-                        {
-                            QSetId = saveModel.QSetId,
-                            QuestionId = ua.QuestionId,
-                            SelectedAnswerId = ua.SelectedAnswerId,
-                            UserName = username
-                        });
-                    }
-                }
-                else
-                {
-                    questionToAdd.Add(new AnsweredQuestion()
-                    {
-                        QSetId = saveModel.QSetId,
-                        QuestionId = ua.QuestionId,
-                        SelectedAnswerId = ua.SelectedAnswerId,
-                        UserName = username
-                    });
-                }
-            }
-
-            if (questionToUpdate.Any())
-            {
-                await _answeredQuestionService.UpdateAnsweredQuestions(questionToUpdate);
-            }
-
-            if (questionToAdd.Any())
-            {
-                await _answeredQuestionService.AddAnsweredQuestions(questionToAdd);
-            }
+            await _answeredQuestionService.SaveAnsweredQuestions(username, saveModel.QSetId, saveModel.UserAnswers);
 
         }
 

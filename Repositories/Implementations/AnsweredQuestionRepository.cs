@@ -23,12 +23,11 @@ namespace quizweb.Repositories.Implementations
         public async Task AddAnsweredQuestionsAsync(List<AnsweredQuestion> answeredQuestions)
         {
             await _context.AnsweredQuestions.AddRangeAsync(answeredQuestions);
-            await _context.SaveChangesAsync();
         }
 
         public async Task<List<AnsweredQuestion>> GetAllAnsweredQuestions(string username, int QSetId)
         {
-            return await _context.AnsweredQuestions.AsNoTracking().Where(aq => aq.UserName == username && aq.QSetId == QSetId).ToListAsync();
+            return await _context.AnsweredQuestions.Where(aq => aq.UserName == username && aq.QSetId == QSetId).ToListAsync();
         }
 
         public async Task<AnsweredQuestion?> GetAnsweredQuestionById(int qId)
@@ -42,15 +41,21 @@ namespace quizweb.Repositories.Implementations
             await _context.SaveChangesAsync();
         }
 
+        public async Task SaveChangeAsync()
+        {
+            await _context.SaveChangesAsync();
+        }
+
         public async Task UpdateAnsweredQuestionAsync(AnsweredQuestion answeredQuestion)
         {
             _context.AnsweredQuestions.Update(answeredQuestion);
             await _context.SaveChangesAsync();
         }
 
-        public Task UpdateAnsweredQuestionsAsync(List<AnsweredQuestion> answeredQuestions)
+        public async Task UpdateAnsweredQuestionsAsync(List<AnsweredQuestion> answeredQuestions)
         {
-            throw new NotImplementedException();
+            _context.AnsweredQuestions.UpdateRange(answeredQuestions);
+            await _context.SaveChangesAsync();
         }
     }
 }

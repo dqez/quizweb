@@ -1,7 +1,9 @@
-﻿using quizweb.DTOs;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using quizweb.DTOs;
 using quizweb.Models;
 using quizweb.Repositories.Interfaces;
 using quizweb.Services.Interfaces;
+using quizweb.ViewModels;
 
 namespace quizweb.Services.Implementations
 {
@@ -49,14 +51,50 @@ namespace quizweb.Services.Implementations
             }
         }
 
+        public async Task SaveAnsweredQuestions(string username, int QsetId, List<UserAnswerViewModel> answeredQuestionsVm)
+        {
+            var answeredQuestionList = await _answeredQuestion.GetAllAnsweredQuestions(username, QsetId);
+            var answerQuestionDict = answeredQuestionList.ToDictionary(aq => aq.QuestionId);
+
+            var questionToAdd = new List<AnsweredQuestion>();
+
+            foreach (var ua in answeredQuestionsVm)
+            {
+                if (answerQuestionDict.TryGetValue(ua.QuestionId, out var existingAnswer))
+                {
+                    if (existingAnswer.SelectedAnswerId != ua.SelectedAnswerId)
+                    {
+                        existingAnswer.SelectedAnswerId = ua.SelectedAnswerId;
+                    }
+                }
+                else
+                {
+                    questionToAdd.Add(new AnsweredQuestion()
+                    {
+                        UserName = username,
+                        QSetId = QsetId,
+                        QuestionId = ua.QuestionId,
+                        SelectedAnswerId = ua.SelectedAnswerId
+                    });
+                }
+            }
+
+            if (questionToAdd.Any())
+            {
+                await _answeredQuestion.AddAnsweredQuestionsAsync(questionToAdd);
+            }
+
+            await _answeredQuestion.SaveChangeAsync();
+        }
+
         public async Task UpdateAnsweredQuestion(AnsweredQuestion answeredQuestion)
         {
             await _answeredQuestion.UpdateAnsweredQuestionAsync(answeredQuestion);
         }
 
-        public Task UpdateAnsweredQuestions(List<AnsweredQuestion> answeredQuestions)
+        public async Task UpdateAnsweredQuestions(List<AnsweredQuestion> answeredQuestions)
         {
-            throw new NotImplementedException();
+            await _answeredQuestion.UpdateAnsweredQuestionsAsync(answeredQuestions);
         }
     }
 }
