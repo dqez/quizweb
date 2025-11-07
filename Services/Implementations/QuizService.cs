@@ -1,4 +1,5 @@
-﻿using quizweb.Models;
+﻿using quizweb.DTOs;
+using quizweb.Models;
 using quizweb.Repositories.Interfaces;
 using quizweb.Services.Interfaces;
 using quizweb.ViewModels;
@@ -202,20 +203,13 @@ namespace quizweb.Services.Implementations
 
         public async Task SaveProgressAsync(SaveProgressViewModel saveModel, string username)
         {
+
             var progressQuestionSet = new ProgressQuestionSetViewModel
             {
                 QSetId = saveModel.QSetId,
                 QuestionCount = saveModel.QuestionCount,
                 QuestionLastId = saveModel.QuestionLastId
             };
-            
-            var answeredQuestions = saveModel.UserAnswers.Select(ua => new AnsweredQuestion()
-            {
-                QSetId = saveModel.QSetId,
-                UserName = username,
-                QuestionId = ua.QuestionId,
-                SelectedAnswerId = ua.SelectedAnswerId
-            }).ToList();
 
             var progressQuestionSetExist = await _progressQuestionSetService.GetProgressQuestionSetByUsernameAndQSetId(username, saveModel.QSetId);
             if (progressQuestionSetExist != null)
@@ -229,9 +223,48 @@ namespace quizweb.Services.Implementations
 
             var answeredQuestionList = await _answeredQuestionService.GetAllAnsweredQuestions(username, saveModel.QSetId);
 
-            //Task: get the answered question from db, then compare and check, and finally just get the new answer right now.
+            var answerQuestionDict = answeredQuestionList.ToDictionary(aq => aq.QuestionId, aq => aq);
             
-            await _answeredQuestionService.AddAnsweredQuestions(answeredQuestions);
+            var questionToAdd = new List<AnsweredQuestion>();
+            var questionToUpdate = new List<AnsweredQuestion>();
+
+            foreach (var ua in saveModel.UserAnswers)
+            {
+                if (answerQuestionDict.TryGetValue(ua.QuestionId, out var existingAnswer))
+                {
+                    if (existingAnswer.SelectedAnswerId != ua.SelectedAnswerId)
+                    {
+                        questionToUpdate.Add(new AnsweredQuestion()
+                        {
+                            QSetId = saveModel.QSetId,
+                            QuestionId = ua.QuestionId,
+                            SelectedAnswerId = ua.SelectedAnswerId,
+                            UserName = username
+                        });
+                    }
+                }
+                else
+                {
+                    questionToAdd.Add(new AnsweredQuestion()
+                    {
+                        QSetId = saveModel.QSetId,
+                        QuestionId = ua.QuestionId,
+                        SelectedAnswerId = ua.SelectedAnswerId,
+                        UserName = username
+                    });
+                }
+            }
+
+            if (questionToUpdate.Any())
+            {
+                await _answeredQuestionService.UpdateAnsweredQuestions(questionToUpdate);
+            }
+
+            if (questionToAdd.Any())
+            {
+                await _answeredQuestionService.AddAnsweredQuestions(questionToAdd);
+            }
+
         }
 
         public async Task<QuizResultViewModel> SubmitQuizAsync(SubmitQuizViewModel submitModel, string username)

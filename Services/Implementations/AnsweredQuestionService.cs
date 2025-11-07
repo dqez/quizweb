@@ -53,5 +53,10 @@ namespace quizweb.Services.Implementations
         {
             await _answeredQuestion.UpdateAnsweredQuestionAsync(answeredQuestion);
         }
+
+        public Task UpdateAnsweredQuestions(List<AnsweredQuestion> answeredQuestions)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

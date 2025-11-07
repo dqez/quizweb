@@ -8,6 +8,8 @@ namespace quizweb.Repositories.Interfaces
         Task<AnsweredQuestion?> GetAnsweredQuestionById(int qId);
 
         Task AddAnsweredQuestionsAsync(List<AnsweredQuestion> answeredQuestions);
+        Task UpdateAnsweredQuestionsAsync(List<AnsweredQuestion> answeredQuestions);
+
         Task AddAnsweredQuestionAsync(AnsweredQuestion answeredQuestion);
         Task UpdateAnsweredQuestionAsync(AnsweredQuestion answeredQuestion);
         Task RemoveAnsweredQuestionAsync(AnsweredQuestion answeredQuestion);

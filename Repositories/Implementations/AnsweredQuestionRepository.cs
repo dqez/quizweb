@@ -47,5 +47,10 @@ namespace quizweb.Repositories.Implementations
             _context.AnsweredQuestions.Update(answeredQuestion);
             await _context.SaveChangesAsync();
         }
+
+        public Task UpdateAnsweredQuestionsAsync(List<AnsweredQuestion> answeredQuestions)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
