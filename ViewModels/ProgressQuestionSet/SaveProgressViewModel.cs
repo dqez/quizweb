@@ -1,6 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using quizweb.ViewModels.User;
+using System.ComponentModel.DataAnnotations;
 
-namespace quizweb.ViewModels
+namespace quizweb.ViewModels.ProgressQuestionSet
 {
     public class SaveProgressViewModel : ProgressQuestionSetViewModel
     {

@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace quizweb.ViewModels
+namespace quizweb.ViewModels.User
 {
-    public class UserProfileViewModel
+    public class UserEditViewModel
     {
         [Required]
         [Display(Name = "Username")]
@@ -13,7 +13,7 @@ namespace quizweb.ViewModels
         public string Fullname { get; set; } = null!;
 
         [Display(Name = "Birthday")]
-        public DateOnly Birthday { get; set; }
+        public string Birthday { get; set; } = null!;
 
         [Display(Name = "Sex")]
         public bool Sex { get; set; }

@@ -3,7 +3,7 @@ using quizweb.DTOs;
 using quizweb.Models;
 using quizweb.Repositories.Interfaces;
 using quizweb.Services.Interfaces;
-using quizweb.ViewModels;
+using quizweb.ViewModels.User;
 
 namespace quizweb.Services.Implementations
 {

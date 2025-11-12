@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace quizweb.ViewModels
+namespace quizweb.ViewModels.Ranking
 {
     public class RankingListViewModel
     {

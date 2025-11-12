@@ -1,4 +1,4 @@
-﻿using quizweb.ViewModels;
+﻿using quizweb.ViewModels.ProgressQuestionSet;
 using quizweb.ViewModels.QuestionSet;
 
 namespace quizweb.Services.Interfaces

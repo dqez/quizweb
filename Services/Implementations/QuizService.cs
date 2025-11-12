@@ -2,8 +2,8 @@
 using quizweb.Models;
 using quizweb.Repositories.Interfaces;
 using quizweb.Services.Interfaces;
-using quizweb.ViewModels;
 using quizweb.ViewModels.Answer;
+using quizweb.ViewModels.ProgressQuestionSet;
 using quizweb.ViewModels.Question;
 using quizweb.ViewModels.QuestionSet;
 

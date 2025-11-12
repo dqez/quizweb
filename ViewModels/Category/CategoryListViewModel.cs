@@ -1,4 +1,4 @@
-﻿namespace quizweb.ViewModels
+﻿namespace quizweb.ViewModels.Category
 {
     public class CategoryListViewModel
     {

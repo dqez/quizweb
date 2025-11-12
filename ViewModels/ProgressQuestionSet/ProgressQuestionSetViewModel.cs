@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace quizweb.ViewModels
+namespace quizweb.ViewModels.ProgressQuestionSet
 {
     public class ProgressQuestionSetViewModel
     {

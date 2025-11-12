@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using quizweb.Services.Implementations;
 using quizweb.Services.Interfaces;
-using quizweb.ViewModels;
+using quizweb.ViewModels.ProgressQuestionSet;
 using quizweb.ViewModels.QuestionSet;
 using System.Text.Json;
 

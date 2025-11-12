@@ -1,5 +1,5 @@
 ﻿using quizweb.Models;
-using quizweb.ViewModels;
+using quizweb.ViewModels.ProgressQuestionSet;
 
 namespace quizweb.Services.Interfaces
 {

@@ -1,7 +1,7 @@
 ﻿using quizweb.Models;
 using quizweb.Repositories.Interfaces;
 using quizweb.Services.Interfaces;
-using quizweb.ViewModels;
+using quizweb.ViewModels.ProgressQuestionSet;
 
 namespace quizweb.Services.Implementations
 {

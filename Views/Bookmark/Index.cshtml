@@ -1,0 +1,15 @@
+﻿@using quizweb.ViewModels.BookMarked
+@model List<BookMarkViewModel>;
+@{
+    ViewData["Title"] = "Index";
+}
+
+@{
+    foreach (var bm in Model)
+    {
+        <div>
+            <h3>@bm.QuestionId</h3>
+            <h3>@bm.MarkedTime</h3>
+        </div>
+    }
+}

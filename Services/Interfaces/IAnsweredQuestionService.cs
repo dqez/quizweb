@@ -1,6 +1,6 @@
 ﻿using quizweb.DTOs;
 using quizweb.Models;
-using quizweb.ViewModels;
+using quizweb.ViewModels.User;
 
 namespace quizweb.Services.Interfaces
 {
