@@ -1,6 +1,6 @@
 ﻿namespace quizweb.ViewModels.BookMark
 {
-    public class CreatedQuestionListSetViewModel
+    public class CreatedQuestionSetListViewModel
     {
         public int QSetId { get; set; }
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using quizweb.Services.Interfaces;
 using quizweb.ViewModels;
+using quizweb.ViewModels.Ranking;
 
 namespace quizweb.Controllers
 {

@@ -1,6 +1,7 @@
 ﻿using quizweb.Models;
 using quizweb.Repositories.Interfaces;
 using quizweb.Services.Interfaces;
+using quizweb.ViewModels.BookMark;
 
 namespace quizweb.Services.Implementations
 {
@@ -20,9 +21,18 @@ namespace quizweb.Services.Implementations
             return qs ?? throw new Exception("QuestionSetRandom is not found"); ;
         }
 
-        public async Task<List<QuestionSet>> GetAllCreatedQuestionSetsAsync(string username)
+        public async Task<List<CreatedQuestionSetListViewModel>> GetAllCreatedQuestionSetsAsync(string username)
         {
-            return await _questionSetRepository.GetAllCreatedQuestionSetsByUsernameAsync(username);
+            var cqsList = await _questionSetRepository.GetAllCreatedQuestionSetsByUsernameAsync(username);
+            return cqsList.Select(cqs => new CreatedQuestionSetListViewModel()
+            {
+                QSetId = cqs.QSetId,
+                QSetName = cqs.QSetName,
+                CreatedTime = cqs.CreatedTime,
+                Description = cqs.Description,
+                CategoryId = cqs.CategoryId,
+                LevelId = cqs.LevelId
+            }).ToList();
         }
 
         public async Task<QuestionSet> GetQuestionSetByIdAsync(int id)

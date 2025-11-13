@@ -1,7 +1,7 @@
 ﻿using quizweb.Models;
 using quizweb.Repositories.Interfaces;
 using quizweb.Services.Interfaces;
-using quizweb.ViewModels.BookMarked;
+using quizweb.ViewModels.BookMark;
 
 namespace quizweb.Services.Implementations
 {
@@ -14,10 +14,10 @@ namespace quizweb.Services.Implementations
             _markedQuestionRepository = markedQuestionRepository;
         }
 
-        public async Task<List<BookMarkViewModel>> GetAllMarkedQuestionsAsync(string username)
+        public async Task<List<MarkedQuestionListViewModel>> GetAllMarkedQuestionsAsync(string username)
         {
-            var allMarkedQuestions= await _markedQuestionRepository.GetAllMarkedQuestionsAsync(username);
-            return allMarkedQuestions.Select(mq => new BookMarkViewModel()
+            var allMarkedQuestions = await _markedQuestionRepository.GetAllMarkedQuestionsAsync(username);
+            return allMarkedQuestions.Select(mq => new MarkedQuestionListViewModel()
             {
                 QuestionId = mq.QuestionId,
                 MarkedTime = mq.MarkedTime

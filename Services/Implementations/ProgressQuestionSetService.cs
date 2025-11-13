@@ -1,6 +1,8 @@
-﻿using quizweb.Models;
+﻿using System.Net.WebSockets;
+using quizweb.Models;
 using quizweb.Repositories.Interfaces;
 using quizweb.Services.Interfaces;
+using quizweb.ViewModels.BookMark;
 using quizweb.ViewModels.ProgressQuestionSet;
 
 namespace quizweb.Services.Implementations
@@ -35,9 +37,20 @@ namespace quizweb.Services.Implementations
             }
         }
 
-        public async Task<List<ProgressQuestionSet>> GetAllProgressQuestionSets(string username)
+        public async Task<List<ProgressQuestionSetListViewModel>> GetAllProgressQuestionSets(string username)
         {
-            return await _progressQuestionSetRepository.GetAllProgressQuestionSets(username);
+            var progressList = await _progressQuestionSetRepository.GetAllProgressQuestionSets(username);
+
+            return progressList.Select(p => new ProgressQuestionSetListViewModel()
+            {
+                QSetId = p.QSetId,
+                QSetName = p.QuestionSet.QSetName,
+                QuestionCount = p.QuestionCount,
+                TotalQuestions = p.QuestionSet.Questions.Count(),
+                QuestionLastId = p.QuestionLastId,
+                LastUpdated = p.LastUpdated,
+                AuthorName = p.UserName
+            }).ToList();
         }
 
         public async Task<ProgressQuestionSet?> GetProgressQuestionSetByUsernameAndQSetId(string username, int QSetId)

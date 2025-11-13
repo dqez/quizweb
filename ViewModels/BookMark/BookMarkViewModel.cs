@@ -4,6 +4,6 @@
     {
         public List<MarkedQuestionListViewModel> MarkedQuestionList = new();
         public List<ProgressQuestionSetListViewModel> ProgressQuestionSetList = new();
-        public List<CreatedQuestionListSetViewModel> CreatedQuestionList = new();
+        public List<CreatedQuestionSetListViewModel> CreatedQuestionList = new();
     }
 }

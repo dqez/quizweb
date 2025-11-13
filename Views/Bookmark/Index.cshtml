@@ -1,11 +1,12 @@
-﻿@using quizweb.ViewModels.BookMarked
-@model List<BookMarkViewModel>;
+﻿@model quizweb.ViewModels.BookMark.BookMarkViewModel;
 @{
     ViewData["Title"] = "Index";
 }
 
+<div>
 @{
-    foreach (var bm in Model)
+
+    foreach (var bm in Model.MarkedQuestionList)
     {
         <div>
             <h3>@bm.QuestionId</h3>
@@ -13,3 +14,33 @@
         </div>
     }
 }
+@{
+
+    foreach (var pgs in Model.ProgressQuestionSetList)
+    {
+        <div>
+            <h3>@pgs.QSetId</h3>
+            <h3>@pgs.QSetName</h3>
+            <h3>@pgs.AuthorName</h3>
+            <h3>@pgs.LastUpdated</h3>
+            <h3>@pgs.QuestionCount /@pgs.TotalQuestions</h3>
+            <h3>@pgs.QuestionLastId</h3>
+            
+        </div>
+    }
+}
+@{
+
+    foreach (var bm in Model.CreatedQuestionList)
+    {
+        <div>
+            <h3>@bm.QSetId</h3>
+            <h3>@bm.QSetName</h3>
+            <h3>@bm.CreatedTime</h3>
+            <h3>@bm.CategoryId</h3>
+            <h3>@bm.LevelId</h3>
+            <h3>@bm.Description</h3>
+        </div>
+    }
+}
+</div>
