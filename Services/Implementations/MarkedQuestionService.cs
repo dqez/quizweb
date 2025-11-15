@@ -25,14 +25,20 @@ namespace quizweb.Services.Implementations
 
         }
 
-        public async Task AddMarkedQuestion(MarkedQuestion markedQuestion)
+        public async Task AddMarkedQuestion(string username, int questionId)
         {
-            await _markedQuestionRepository.AddMarkedQuestion(markedQuestion);
+            var mq = new MarkedQuestion()
+            {
+                QuestionId = questionId,
+                UserName = username,
+                MarkedTime = DateTime.UtcNow
+            };
+            await _markedQuestionRepository.AddMarkedQuestion(mq);
         }
 
-        public async Task RemoveMarkedQuestion(int id)
+        public async Task RemoveMarkedQuestion(string username, int questionId)
         {
-            var mq = await _markedQuestionRepository.GetMarkedQuestionByIdAsync(id);
+            var mq = await _markedQuestionRepository.GetMarkedQuestionByIdAsync(username, questionId);
             if (mq != null)
             {
                 await _markedQuestionRepository.RemoveMarkedQuestion(mq);

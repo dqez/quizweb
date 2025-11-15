@@ -5,8 +5,8 @@ namespace quizweb.Services.Interfaces
     public interface IMarkedQuestionService
     {
         public Task<List<MarkedQuestionListViewModel>> GetAllMarkedQuestionsAsync(string username);
-        public Task AddMarkedQuestion(MarkedQuestion markedQuestion);
-        public Task RemoveMarkedQuestion(int id);
+        public Task AddMarkedQuestion(string username, int questionId);
+        public Task RemoveMarkedQuestion(string username, int questionId);
 
     }
 }

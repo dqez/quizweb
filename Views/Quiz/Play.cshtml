@@ -22,6 +22,8 @@
 
         <div class="question-container" data-question-id="@q.QuestionId">
             <input type="hidden" name="UserAnswers[@i].QuestionId" value="@q.QuestionId" />
+            <input type="checkbox" class="save-question-checkbox" id="save-@q.QuestionId" data-question-id="@q.QuestionId"/>
+
             <div class="QuestionText">Question: @q.QuestionText</div>
             <div class="Options">
 
@@ -214,6 +216,17 @@
                         confirmAndNavigate(linkUrl);
                     });
             });
+
+
+            
+
+
+
+
+
+
+
+
         })();
     </script>
 }

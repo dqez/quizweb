@@ -39,5 +39,35 @@ namespace quizweb.Controllers
 
             return View(bookmarkViewModel);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SaveQuestion(int questionId)
+        {
+            var username = User.Identity?.Name;
+            if (string.IsNullOrEmpty(username))
+            {
+                return Unauthorized();
+            }
+
+            await _markedQuestionService.AddMarkedQuestion(username, questionId);
+
+            return NoContent();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UnsaveQuestion(int questionId)
+        {
+            var username = User.Identity?.Name;
+            if (string.IsNullOrEmpty(username))
+            {
+                return Unauthorized();
+            }
+
+            await _markedQuestionService.RemoveMarkedQuestion(username, questionId);
+
+            return NoContent();
+        }
     }
 }
