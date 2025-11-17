@@ -42,7 +42,7 @@ namespace quizweb.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SaveQuestion(int questionId)
+        public async Task<IActionResult> SaveQuestion([FromBody] int questionId)
         {
             var username = User.Identity?.Name;
             if (string.IsNullOrEmpty(username))
@@ -57,7 +57,7 @@ namespace quizweb.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UnsaveQuestion(int questionId)
+        public async Task<IActionResult> UnsaveQuestion([FromBody] int questionId)
         {
             var username = User.Identity?.Name;
             if (string.IsNullOrEmpty(username))

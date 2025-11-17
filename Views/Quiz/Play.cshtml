@@ -58,6 +58,8 @@
         (function() {
             const form = document.getElementById('quizForm');
             const saveUrl = form.dataset.saveUrl; // SaveProgress endpoint
+            const tokenInput = form.querySelector('input[name="__RequestVerificationToken"]');
+
             let dirty = false;
 
             const questionLastId = document.getElementById('QuestionLastId');
@@ -141,7 +143,6 @@
                 });
 
 
-                const tokenInput = form.querySelector('input[name="__RequestVerificationToken"]');
                 if (tokenInput && !fd.has('__RequestVerificationToken')) {
                     fd.append('__RequestVerificationToken', tokenInput.value);
                 }
@@ -200,32 +201,62 @@
                 }
             }
 
-            // 7) Intercept navbar links (common pattern) - add data-confirm="true" to links you want protected
-            // Protect links that have class 'nav-link' or attribute data-confirm="true"
             document.querySelectorAll('a.nav-link, a[data-confirm="true"]').forEach(a => {
-                // skip links that target same page anchors or javascript:void
                 if (!a.href || a.getAttribute('href').startsWith('#') || a.getAttribute('href').startsWith('javascript:')) return;
-
-                a.addEventListener('click',
-                    function(ev) {
-                        // if link points to current origin and is a different page, intercept
-                        const linkUrl = a.href;
-                        const samePage = (linkUrl.split('#')[0] === window.location.href.split('#')[0]);
-                        if (samePage) return; // allow anchors on same page
-                        ev.preventDefault();
-                        confirmAndNavigate(linkUrl);
-                    });
+                a.addEventListener('click', function(ev) {
+                    const linkUrl = a.href;
+                    const samePage = (linkUrl.split('#')[0] === window.location.href.split('#')[0]);
+                    if (samePage) return;
+                    ev.preventDefault();
+                    confirmAndNavigate(linkUrl);
+                });
             });
 
+            // --- ADDITION: Send QuestionId to Quiz/SaveQuestion when checkbox is ticked ---
+            document.querySelectorAll('.save-question-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', function(ev) {
+                    const questionId = parseInt(ev.target.dataset.questionId);
 
-            
+                    console.log("Question ID from HTML:", questionId); // Kiểm tra xem ở đây có hiện 4 không?
+                    console.log("Type:", typeof questionId);
 
-
-
-
-
-
-
+                    if (checkbox.checked) {
+                        fetch('/Bookmark/SaveQuestion', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'RequestVerificationToken': tokenInput ? tokenInput.value : ''
+                            },
+                            body: questionId,
+                            credentials: 'same-origin'
+                        })
+                        .then(response => {
+                            if (!response.ok) throw new Error('SaveQuestion failed: ' + response.status);
+                        })
+                        .catch(err => {
+                            alert('Could not save question: ' + err.message);
+                        });
+                    } else {
+                        fetch('/Bookmark/UnsaveQuestion', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'RequestVerificationToken': tokenInput ? tokenInput.value : ''
+                            },
+                            body: questionId,
+                            credentials: 'same-origin'
+                        })
+                        .then(response => {
+                            if (!response.ok) throw new Error('UnsaveQuestion failed: ' + response.status);
+                        })
+                        .catch(err => {
+                            alert('Could not unsave question: ' + err.message);
+                        });
+                    }
+                });
+            });
 
         })();
     </script>
